@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>AngularJS Plunker</title>
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <link rel="stylesheet" href="style.css" />
+    <script data-require="angular.js@1.2.x" src="https://code.angularjs.org/1.2.21/angular.js" data-semver="1.2.21"></script>
+    <script src="angular-scroll-range.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-controller="MainCtrl" scroll-range>
+    <div id="scroll-stage"
+      sr-watch="{lower: rangeStart, upper: rangeEnd}"
+      sr-style="{backgroundColor: 'rgba(0, 0, 0, '+ 1 * $progress +')'}">
+      
+    </div>
+  </body>
+
+</html>
