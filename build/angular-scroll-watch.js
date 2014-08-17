@@ -12,6 +12,20 @@
 
     var $win = angular.element($window);
 
+    // ref: http://davidwalsh.name/function-debounce
+    var debounce = function (func, wait, immediate) {
+      var timeout;
+      return function() {
+        var context = this, args = arguments;
+        $window.clearTimeout(timeout);
+        timeout = $window.setTimeout(function() {
+          timeout = null;
+          if (!immediate) func.apply(context, args);
+        }, wait);
+        if (immediate && !timeout) func.apply(context, args);
+      };
+    };
+
     var requestAnimFrame = (function () {
       return  $window.requestAnimationFrame       ||
               $window.webkitRequestAnimationFrame ||
@@ -290,6 +304,7 @@
         });
       };
     }());
+    var updatePointDebounced = debounce(updatePoint, 50);
 
     this._configId = 0;
 
@@ -301,8 +316,6 @@
       $win
       .bind('scroll', updatePoint)
       .bind('resize', updatePoint);
-
-      updatePoint();
     };
 
     this.addConfig = function (config) {
@@ -338,6 +351,8 @@
       }
 
       this.configs[this._configId] = config;
+
+      updatePointDebounced();
     };
 
     this.removeConfig = function (index) {
