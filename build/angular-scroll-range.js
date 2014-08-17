@@ -7,7 +7,8 @@
 
   module
 
-  .controller('ScrollRangeCtrl', ["$window", "$document", "$parse", "$log", "$rootScope", function ($window, $document, $parse, $log, $rootScope) {
+  .controller('ScrollRangeCtrl', 
+  ["$window", "$document", "$parse", "$log", "$rootScope", "$animate", function ScrollRangeCtrl($window, $document, $parse, $log, $rootScope, $animate) {
     var self = this;
 
     var $win = angular.element($window);
@@ -50,49 +51,81 @@
 
       var reBpCond = /((?:>|<)?=?)\s*?((?:-(?!p))|(?:p(?!-)))?(\d+)/;
 
-      var _updateStyle, _updateClass, _addClass, _removeClass,
-          _breakpointTrigger;
+      var _handleStyle,
 
-      _updateStyle = function (local, config) {
+          _handleClass, _addClasses, _removeClasses, 
+          _digestClassCounts, _updateClasses,
+
+          _handleBreakpoint;
+
+      /**
+       * Style related functions
+       */
+      _handleStyle = function (local, config) {
         config.target.css(config.styleGetter(config.scope, local));
       };
-      _addClass = function ($elm, val) {
-        var buf;
-        if (angular.isObject(val) && !angular.isArray(val)) {
-          buf = [];
-          angular.forEach(val, function (v, k) {
-            if (v) {
-              buf.push(k);
+
+      /**
+       * Class related functions
+       */
+      _addClasses = function (config, classes) {
+        var attr = config.attr;
+        var newClasses = _digestClassCounts(config, classes, 1);
+        attr.$addClass(newClasses);
+      };
+      _removeClasses = function (config, classes) {
+        var attr = config.attr;
+        var newClasses = _digestClassCounts(config, classes, -1);
+        attr.$removeClass(newClasses);
+      };
+      _digestClassCounts = function (config, classes, count) {
+        var element = config.target;
+        var classCounts = element.data('$classCounts') || {};
+        var classesToUpdate = [];
+        angular.forEach(classes, function (className) {
+          if (count > 0 || classCounts[className]) {
+            classCounts[className] = (classCounts[className] || 0) + count;
+            if (classCounts[className] === +(count > 0)) {
+              classesToUpdate.push(className);
             }
-          });
-          val = buf;
-        }
-        if (val) {
-          $elm.addClass(angular.isArray(val) ? val.join(' ') : val);
+          }
+        });
+        element.data('$classCounts', classCounts);
+        return classesToUpdate.join(' ');
+      };
+      _updateClasses = function (config, oldClasses, newClasses) {
+        var element = config.target;
+        var toAdd = arrayDifference(newClasses, oldClasses);
+        var toRemove = arrayDifference(oldClasses, newClasses);
+        toRemove = _digestClassCounts(config, toRemove, -1);
+        toAdd = _digestClassCounts(config, toAdd, 1);
+
+        if (toAdd.length === 0) {
+          $animate.removeClass(element, toRemove);
+        } else if (toRemove.length === 0) {
+          $animate.addClass(element, toAdd);
+        } else {
+          $animate.setClass(element, toAdd, toRemove);
         }
       };
-      _removeClass = function ($elm, val) {
-        var buf;
-        if (angular.isObject(val) && !angular.isArray(val)) {
-          buf = [];
-          angular.forEach(val, function (v, k) {
-            if (v) {
-              buf.push(k);
-            }
-          });
-          val = buf;
+      _handleClass = function (local, config) {
+        var newVal = config.classGetter(config.scope, local),
+            oldVal = config._oldClassVal;
+        var newClasses = arrayClasses(newVal || []);
+        if (!oldVal) {
+          _addClasses(config, newClasses);
         }
-        $elm.removeClass(angular.isArray(val) ? val.join(' ') : val);
-      };
-      _updateClass = function (local, config) {
-        var classVal = config.classGetter(config.scope, local);
-        if (config._oldClassVal && !angular.equals(classVal, config._oldClassVal)) {
-          _removeClass(config.target, config._oldClassVal);
+        else if (!angular.equals(newVal, oldVal)) {
+          var oldClasses = arrayClasses(oldVal);
+          _updateClasses(config, oldClasses, newClasses);
         }
-        _addClass(config.target, classVal);
-        config._oldClassVal = classVal;
+        config._oldClassVal = shallowCopy(newVal);
       };
-      _breakpointTrigger = function (local, config) {
+
+      /**
+       * Breakpoint related functions
+       */
+      _handleBreakpoint = function (local, config) {
         var matchCondition = function (condition) {
           var m, op, mod, number, thresholdKey,
               eq, lt, gt, le, ge;
@@ -216,17 +249,17 @@
            */
           // to style
           if (config.styleGetter) {
-            _updateStyle(localContext, config);
+            _handleStyle(localContext, config);
           }
 
           // to class
           if (config.classGetter) {
-            _updateClass(localContext, config);
+            _handleClass(localContext, config);
           }
 
           // trigger breakpoints
           if (config.onGetterList) {
-            _breakpointTrigger(localContext, config);
+            _handleBreakpoint(localContext, config);
           }
 
           config._lastProgress = progress;
@@ -339,6 +372,7 @@
 
                 if (iAttrs[DIR_CLASS]) {
                   config.classExpr = iAttrs[DIR_CLASS];
+                  config.attr = iAttrs;
                 }
 
                 if (iAttrs[DIR_ON]) {
@@ -391,6 +425,7 @@
 
               if (iAttrs[DIR_CLASS]) {
                 config.classExpr = iAttrs[DIR_CLASS];
+                config.attr = iAttrs;
               }
 
               if (iAttrs[DIR_ON]) {
@@ -410,5 +445,56 @@
       }
     };
   });
+
+  function arrayDifference(tokens1, tokens2) {
+    var values = [];
+
+    outer:
+    for(var i = 0; i < tokens1.length; i++) {
+      var token = tokens1[i];
+      for(var j = 0; j < tokens2.length; j++) {
+        if(token == tokens2[j]) continue outer;
+      }
+      values.push(token);
+    }
+    return values;
+  }
+
+  function arrayClasses (classVal) {
+    if (angular.isArray(classVal)) {
+      return classVal;
+    } else if (angular.isString(classVal)) {
+      return classVal.split(' ');
+    } else if (angular.isObject(classVal)) {
+      var classes = [], i = 0;
+      angular.forEach(classVal, function(v, k) {
+        if (v) {
+          classes = classes.concat(k.split(' '));
+        }
+      });
+      return classes;
+    }
+    return classVal;
+  }
+
+  function shallowCopy(src, dst) {
+    if (angular.isArray(src)) {
+      dst = dst || [];
+
+      for ( var i = 0; i < src.length; i++) {
+        dst[i] = src[i];
+      }
+    } else if (angular.isObject(src)) {
+      dst = dst || {};
+
+      for (var key in src) {
+        if (hasOwnProperty.call(src, key) && !(key.charAt(0) === '$' && key.charAt(1) === '$')) {
+          dst[key] = src[key];
+        }
+      }
+    }
+
+    return dst || src;
+  }
 
 })(angular.module('pc035860.scrollRange', []));
