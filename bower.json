@@ -1,6 +1,6 @@
 {
   "name": "angular-scroll-range",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Basic scroll-aware directives for AngularJS.",
   "main": "angular-scroll-range.js",
   "ignore": [
