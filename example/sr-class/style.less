@@ -1,0 +1,51 @@
+@import "../lesshat-prefixed";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#scroll-stage {
+  .lh-background-image(linear-gradient(90deg, rgba(250,198,149,1) 0, rgba(245,171,102,1) 47%, rgba(239,141,49,1) 100%));
+  .lh-background-size(auto, auto);
+  .lh-background-origin(padding-box);
+  .lh-background-clip(border-box);
+
+  height: 5000px;
+}
+
+#hero {
+  .lh-translate(-50%, -50%);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+.make-progress(@font-size; @animation) {
+  font-size: @font-size;
+
+  &-add {
+    .lh-animation(@animation);
+    font-size: @font-size;
+  }
+  &-remove {
+    .lh-transition(all 500ms ease-in-out);
+  }
+}
+
+.p20 {
+  .make-progress(20px; shake 1s);
+}
+
+.p40 {
+  .make-progress(60px; tada 1s);
+}
+
+.p80 {
+  .make-progress(100px; rubberBand 1s);
+}
+
+.p100 {
+  .make-progress(140px; flip 1s);
+}
