@@ -353,6 +353,8 @@
       this.configs[this._configId] = config;
 
       updatePointDebounced();
+
+      return this._configId;
     };
 
     this.removeConfig = function (index) {
