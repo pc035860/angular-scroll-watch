@@ -1,14 +1,13 @@
 (function (module) {
 
-  var DIR_STYLE = 'srStyle',
-      DIR_WATCH = 'srWatch',
-      DIR_CLASS = 'srClass',
+  var DIR_STYLE = 'swStyle',
+      DIR_CLASS = 'swClass',
       DIR_ON = 'srOn';
 
   module
 
-  .controller('ScrollRangeCtrl', 
-  ["$window", "$document", "$parse", "$log", "$rootScope", "$animate", function ScrollRangeCtrl($window, $document, $parse, $log, $rootScope, $animate) {
+  .service('scrollWatchService', 
+  function scrollWatchService($window, $document, $parse, $log, $rootScope, $animate) {
     var self = this;
 
     var $win = angular.element($window);
@@ -23,6 +22,14 @@
                 $window.setTimeout(callback, 1000 / 60);
               };
     })();
+
+    var objectSize = function (obj) {
+      var c = 0;
+      angular.forEach(obj, function () {
+        c++;
+      });
+      return c;
+    };
 
     var getDocumentHeight = function () {
       var doc = $document[0].documentElement,
@@ -305,6 +312,10 @@
         }
       });
 
+      if (this.configs === null) {
+        this.init();
+      }
+
       this._configId++;
 
       if (config.styleExpr) {
@@ -332,6 +343,10 @@
     this.removeConfig = function (index) {
       if (this.configs && this.configs[index]) {
         delete this.configs[index];
+
+        if (objectSize(this.configs) === 0) {
+          this.destroy();
+        }
       }
     };
 
@@ -342,78 +357,19 @@
       .unbind('scroll', updatePoint)
       .unbind('resize', updatePoint);
     };
-  }])
-
-  .directive('scrollRange', function () {
-    return {
-      restrict: 'A',
-      controller: 'ScrollRangeCtrl',
-      link: {
-        pre: function preLink(scope, iElm, iAttrs, ctrl) {
-          ctrl.init();
-
-          var configId;
-
-          if (iAttrs[DIR_WATCH] &&
-            (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_ON])) {
-
-            scope.$watch(iAttrs[DIR_WATCH], function (config) {
-              if (config && angular.isObject(config)) {
-                if (configId) {
-                  ctrl.removeConfig(configId);
-                }
-
-                config.target = iElm;
-                config.scope = scope;
-
-                if (iAttrs[DIR_STYLE]) {
-                  config.styleExpr = iAttrs[DIR_STYLE];
-                }
-
-                if (iAttrs[DIR_CLASS]) {
-                  config.classExpr = iAttrs[DIR_CLASS];
-                  config.attr = iAttrs;
-                }
-
-                if (iAttrs[DIR_ON]) {
-                  config.onExpr = iAttrs[DIR_ON];
-                }
-
-                configId = ctrl.addConfig(config);
-              }
-            }, true);
-
-            iElm.on('$destroy', function () {
-              if (configId) {
-                ctrl.removeConfig(configId);
-              }
-            });
-          }
-
-          iElm.on('$destroy', function () {
-            ctrl.destroy();
-          });
-        }
-      }
-    };
   })
 
-  .directive(DIR_WATCH, function () {
+  .directive('scrollWatch', function (scrollWatchService) {
     return {
-      require: '?^scrollRange',
       restrict: 'A',
-      link: function postLink(scope, iElm, iAttrs, ctrl) {
-        if (angular.isDefined(iAttrs.scrollRange)) {
-          return;
-        }
-
+      link: function postLink(scope, iElm, iAttrs) {
         var configId;
 
         if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_ON]) {
-          scope.$watch(iAttrs[DIR_WATCH], function (config) {
+          scope.$watch(iAttrs.scrollWatch, function (config) {
             if (config && angular.isObject(config)) {
               if (configId) {
-                ctrl.removeConfig(configId);
+                scrollWatchService.removeConfig(configId);
               }
 
               config.target = iElm;
@@ -432,13 +388,13 @@
                 config.onExpr = iAttrs[DIR_ON];
               }
 
-              configId = ctrl.addConfig(config);
+              configId = scrollWatchService.addConfig(config);
             }
           }, true);
 
           iElm.on('$destroy', function () {
             if (configId) {
-              ctrl.removeConfig(configId);
+              scrollWatchService.removeConfig(configId);
             }
           });
         }
@@ -497,4 +453,4 @@
     return dst || src;
   }
 
-})(angular.module('pc035860.scrollRange', []));
+})(angular.module('pc035860.scrollWatch', []));

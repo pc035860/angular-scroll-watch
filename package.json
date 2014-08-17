@@ -1,5 +1,5 @@
 {
-  "name": "angular-scroll-range",
+  "name": "anguar-scroll-watch",
   "version": "0.2.0",
   "description": "Basic scroll-aware directives for AngularJS.",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pc035860/angular-scroll-range.git"
+    "url": "https://github.com/pc035860/angular-scroll-watch.git"
   },
   "author": "Chih-Hsuan Fan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pc035860/angular-scroll-range/issues"
+    "url": "https://github.com/pc035860/angular-scroll-watch/issues"
   },
-  "homepage": "https://github.com/pc035860/angular-scroll-range",
+  "homepage": "https://github.com/pc035860/angular-scroll-watch",
   "devDependencies": {
     "gulp": "^3.8.6",
     "gulp-util": "^3.0.0",

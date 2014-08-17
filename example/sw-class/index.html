@@ -3,39 +3,37 @@
 
   <head>
     <meta charset="utf-8" />
-    <title>angular-scroll-range: sr-style</title>
+    <title>angular-scroll-watch: sw-class</title>
 
     <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
 
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.min.css">
     <link rel="stylesheet/less" type="text/css" href="style.less" />
 
     <script src="//cdn.jsdelivr.net/less/1.7.3/less.min.js"></script>
 
     <script src="//code.angularjs.org/1.2.22/angular.js"></script>
-    <script src="../../src/angular-scroll-range.js"></script>
+    <script src="//code.angularjs.org/1.2.22/angular-animate.js"></script>
+    <script src="../../src/angular-scroll-watch.js"></script>
     <script src="../digest-count.js"></script>
 
     <script>
-    angular.module('app', ['app.digest-count', 'pc035860.scrollRange'])
+    angular.module('app', [
+      'ngAnimate',
+      'app.digest-count',
+      'pc035860.scrollWatch'
+    ])
 
     .controller('MainCtrl', function ($scope, $log) {
       $scope.lower = 0;
       $scope.upper = -1;
-
-      $scope.rgb = function (p) {
-        var num = Math.round(255 * p);
-
-        num = Math.max(0, Math.min(num, 255));
-
-        return [num, num, num].join(',');
-      };
     });
     </script>
   </head>
 
   <body ng-controller="MainCtrl" scroll-range>
     <!-- fork me on github -->
-    <a href="https://github.com/pc035860/angular-scroll-range">
+    <a href="https://github.com/pc035860/angular-scroll-watch">
       <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
     </a>
 
@@ -43,17 +41,19 @@
     <div digest-count></div>
 
     <div id="scroll-stage"
-      sr-watch="{lower: lower, upper: upper}"
-      sr-style="{backgroundColor: 'rgba(0, 0, 0, '+ 1 * $progress +')'}">
+      scroll-watch="{lower: 0, upper: -1}"
+      sw-style="{width: 100 * $progress + '%'}">
     </div>
 
-    <h1 id="hero"
-      sr-watch="{lower: 1250, upper: 3750}"
-      sr-style="{
-        textShadow: '0 0 20px rgba(' + rgb($progress) + ', 0.5)',
-        color: 'rgb(' + rgb($progress) + ')'
-      }">
-      Stay with me!!
+    <h1 id="hero">
+      <div class="hero__inner"
+        scroll-watch="{lower: 0, upper: -1}"
+        sw-class="{
+          p20 : $percentage > 20,
+          p40 : $percentage > 40,
+          p80 : $percentage > 80,
+          p100: $percentage >= 100
+        }">Stay with me!!</div>
     </h1>
   </body>
 
