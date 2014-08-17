@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: sw-class</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.min.css">
+    <link rel="stylesheet/less" type="text/css" href="style.less" />
+
+    <script src="//cdn.jsdelivr.net/less/1.7.3/less.min.js"></script>
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script src="//code.angularjs.org/1.2.22/angular-animate.js"></script>
+    <script src="../../src/angular-scroll-watch.js"></script>
+    <script src="../digest-count.js"></script>
+
+    <script>
+    angular.module('app', [
+      'ngAnimate',
+      'app.digest-count',
+      'pc035860.scrollWatch'
+    ])
+
+    .factory('getWinDim', function ($document) {
+      return function getWinDim () {
+        var $doc = $document[0].documentElement;
+        return {
+          width: $doc.clientWidth,
+          height: $doc.clientHeight
+        };
+      };
+    })
+
+    .controller('MainCtrl', function ($scope, $log, getWinDim) {
+      $scope.number = 20;
+      $scope.angulars = [];
+
+      $scope.$watch('number', function (newVal, oldVal) {
+        newVal = Number(newVal);
+
+        $scope.angulars.length = 0;
+
+        var i, winDim = getWinDim();
+        for (i = 0; i < newVal; i++) {
+          $scope.angulars.push(_getAnAngular(winDim));
+        }
+      });
+
+      function _getAnAngular (dim) {
+        var ANGULAR_WIDTH = 197,
+            ANGULAR_HEIGHT = 207;
+
+        var showAt = _getRandomInt(0, 80),
+            hideAt = _getRandomInt(showAt + 10, Math.min(showAt + 40, 100));
+
+        return {
+          left: _getRandomInt(dim.width * 0.1, dim.width * 0.9) - ANGULAR_WIDTH / 2,
+          top: _getRandomInt(dim.height * 0.1, dim.height * 0.9) - ANGULAR_HEIGHT / 2,
+          showAt: showAt,
+          hideAt: hideAt,
+          animNo: _getRandomInt(1, 14)
+        };
+      }
+
+      function _getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+      }
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+
+    <div id="scroll-stage"></div>
+
+    <div id="angular-container">
+      <div class="angular"
+        ng-repeat="item in angulars"
+        ng-class="'anim-' + item.animNo"
+        ng-style="{
+          left: item.left + 'px',
+          top: item.top + 'px'
+        }"
+        scroll-watch="{lower: 0, upper: -1}"
+        sw-class="{'in-view': $percentage > item.showAt && $percentage < item.hideAt}">
+        <img src="AngularJS-Shield-medium.png" alt="angularjs shield">
+      </div>
+    </div>
+
+    <div id="form">
+      <h2>How much angular do you want?</h2>
+      <input type="text" ng-model="number" class="form-control">
+    </div>
+
+  </body>
+
+</html>

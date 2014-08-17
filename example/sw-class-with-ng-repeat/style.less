@@ -1,0 +1,94 @@
+@import "../lesshat-prefixed";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#scroll-stage {
+  background-color: #333;
+  height: 10000px;
+}
+
+#form {
+  .lh-translate(-50%, -50%);
+  .lh-size(600px, 230px);
+  .lh-border-radius(5px);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+
+  text-align: center;
+
+  padding: 0 30px;
+  background-color: rgba(177, 161, 120, 0.42);
+
+  h2 {
+    margin-bottom: 20px;
+    color: rgb(255, 209, 110);
+    text-shadow: 0 1px 1px rgb(85, 62, 3);
+  }
+
+  input {
+    @font-size: 80px;
+    @line-height: 1.5;
+    height: @font-size * @line-height;
+    font-size: @font-size;
+    text-align: center;
+  }
+}
+
+#angular-container {
+  .lh-size(100%);
+
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 5;
+
+  .angular {
+    position: absolute;
+
+    img {
+      opacity: 0.8;
+    }
+  }
+
+  .setup-anim (@no; @add-anim; @remove-anim) {
+    .anim-@{no} {
+      display: none;
+
+      &.in-view {
+        display: block;
+
+        &-add {
+          .lh-animation(@add-anim 1s both);
+        }
+        &-remove {
+          .lh-animation(@remove-anim 1s both);
+          display: block;
+        }
+      }
+    }
+  }
+
+  .setup-anim(1; bounceInDown; bounceOutDown);
+  .setup-anim(2; bounceInRight; bounceOutLeft);
+  .setup-anim(3; bounceInUp; bounceOutUp);
+  
+  .setup-anim(4; fadeInDown; fadeOutDown);
+  .setup-anim(5; fadeInRight; fadeOutLeft);
+  .setup-anim(6; fadeInUp; fadeOutUp);
+
+  .setup-anim(7; rotateIn; rotateOut);
+
+  .setup-anim(8; flipInX; flipOutX);
+  .setup-anim(9; flipInY; flipOutY);
+
+  .setup-anim(10; zoomInDown; zoomOutDown);
+  .setup-anim(11; zoomInRight; zoomOutLeft);
+  .setup-anim(12; zoomInUp; zoomOutUp);
+
+  .setup-anim(13; rollIn; rollOut);
+}
