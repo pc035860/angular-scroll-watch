@@ -1,3 +1,4 @@
+/*global require*/
 var gulp = require('gulp'),
     gutil = require('gulp-util');
 
@@ -25,7 +26,7 @@ var config = {
   watch: {
     example: 'example/{,**/}*.{js,html,css,less}'
   },
-  appRoot: ['src', 'example'],
+  appRoot: '',
   src: 'src/angular-scroll-range.js',
   buildDir: 'build',
   banner: '/*! <%= pkg.name %>\n' +
