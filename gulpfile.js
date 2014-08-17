@@ -27,7 +27,7 @@ var config = {
     example: 'example/{,**/}*.{js,html,css,less}'
   },
   appRoot: '',
-  src: 'src/angular-scroll-range.js',
+  src: 'src/angular-scroll-watch.js',
   buildDir: 'build',
   banner: '/*! <%= pkg.name %>\n' +
     'version: <%= pkg.version %>\n' +

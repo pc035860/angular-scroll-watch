@@ -1,4 +1,4 @@
-# angular-scroll-range
+# angular-scroll-watch
 
 Basic scroll-aware directives for AngularJS.
 
