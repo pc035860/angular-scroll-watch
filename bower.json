@@ -1,0 +1,17 @@
+{
+  "name": "angular-scroll-range",
+  "version": "0.1.0",
+  "description": "Basic scroll-aware directives for AngularJS.",
+  "main": "angular-scroll-range.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "gulpfile.js",
+    "package.json",
+    "test",
+    "tests",
+    "index.html"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}
