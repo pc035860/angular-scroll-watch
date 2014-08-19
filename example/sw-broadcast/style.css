@@ -33,64 +33,64 @@ body {
   background-color: #3498db;
 }
 .slide--1.ng-hide-add {
-  -webkit-animation: bounceOut 1s;
-  -moz-animation: bounceOut 1s;
-  -o-animation: bounceOut 1s;
-  animation: bounceOut 1s;
+  -webkit-animation: bounceOut 1s both;
+  -moz-animation: bounceOut 1s both;
+  -o-animation: bounceOut 1s both;
+  animation: bounceOut 1s both;
 }
 .slide--1.ng-hide-remove {
-  -webkit-animation: bounceIn 1s;
-  -moz-animation: bounceIn 1s;
-  -o-animation: bounceIn 1s;
-  animation: bounceIn 1s;
+  -webkit-animation: bounceIn 1s 300ms both;
+  -moz-animation: bounceIn 1s 300ms both;
+  -o-animation: bounceIn 1s 300ms both;
+  animation: bounceIn 1s 300ms both;
   z-index: 2;
 }
 .slide--2 {
   background-color: #e74c3c;
 }
 .slide--2.ng-hide-add {
-  -webkit-animation: zoomOutRight 1s;
-  -moz-animation: zoomOutRight 1s;
-  -o-animation: zoomOutRight 1s;
-  animation: zoomOutRight 1s;
+  -webkit-animation: zoomOutRight 1s both;
+  -moz-animation: zoomOutRight 1s both;
+  -o-animation: zoomOutRight 1s both;
+  animation: zoomOutRight 1s both;
 }
 .slide--2.ng-hide-remove {
-  -webkit-animation: zoomInLeft 1s;
-  -moz-animation: zoomInLeft 1s;
-  -o-animation: zoomInLeft 1s;
-  animation: zoomInLeft 1s;
+  -webkit-animation: zoomInLeft 1s 300ms both;
+  -moz-animation: zoomInLeft 1s 300ms both;
+  -o-animation: zoomInLeft 1s 300ms both;
+  animation: zoomInLeft 1s 300ms both;
   z-index: 2;
 }
 .slide--3 {
   background-color: #34495e;
 }
 .slide--3.ng-hide-add {
-  -webkit-animation: fadeOutLeft 1s;
-  -moz-animation: fadeOutLeft 1s;
-  -o-animation: fadeOutLeft 1s;
-  animation: fadeOutLeft 1s;
+  -webkit-animation: fadeOutLeft 1s both;
+  -moz-animation: fadeOutLeft 1s both;
+  -o-animation: fadeOutLeft 1s both;
+  animation: fadeOutLeft 1s both;
 }
 .slide--3.ng-hide-remove {
-  -webkit-animation: fadeInRight 1s;
-  -moz-animation: fadeInRight 1s;
-  -o-animation: fadeInRight 1s;
-  animation: fadeInRight 1s;
+  -webkit-animation: fadeInRight 1s 300ms both;
+  -moz-animation: fadeInRight 1s 300ms both;
+  -o-animation: fadeInRight 1s 300ms both;
+  animation: fadeInRight 1s 300ms both;
   z-index: 2;
 }
 .slide--4 {
   background-color: #1abc9c;
 }
 .slide--4.ng-hide-add {
-  -webkit-animation: bounceOutDown 1s;
-  -moz-animation: bounceOutDown 1s;
-  -o-animation: bounceOutDown 1s;
-  animation: bounceOutDown 1s;
+  -webkit-animation: bounceOutDown 1s both;
+  -moz-animation: bounceOutDown 1s both;
+  -o-animation: bounceOutDown 1s both;
+  animation: bounceOutDown 1s both;
 }
 .slide--4.ng-hide-remove {
-  -webkit-animation: bounceInDown 1s;
-  -moz-animation: bounceInDown 1s;
-  -o-animation: bounceInDown 1s;
-  animation: bounceInDown 1s;
+  -webkit-animation: bounceInDown 1s 300ms both;
+  -moz-animation: bounceInDown 1s 300ms both;
+  -o-animation: bounceInDown 1s 300ms both;
+  animation: bounceInDown 1s 300ms both;
   z-index: 2;
 }
 .slide--5 {
@@ -98,15 +98,15 @@ body {
   color: #333;
 }
 .slide--5.ng-hide-add {
-  -webkit-animation: zoomOutUp 1s;
-  -moz-animation: zoomOutUp 1s;
-  -o-animation: zoomOutUp 1s;
-  animation: zoomOutUp 1s;
+  -webkit-animation: zoomOutUp 1s both;
+  -moz-animation: zoomOutUp 1s both;
+  -o-animation: zoomOutUp 1s both;
+  animation: zoomOutUp 1s both;
 }
 .slide--5.ng-hide-remove {
-  -webkit-animation: zoomInUp 1s;
-  -moz-animation: zoomInUp 1s;
-  -o-animation: zoomInUp 1s;
-  animation: zoomInUp 1s;
+  -webkit-animation: zoomInUp 1s 300ms both;
+  -moz-animation: zoomInUp 1s 300ms both;
+  -o-animation: zoomInUp 1s 300ms both;
+  animation: zoomInUp 1s 300ms both;
   z-index: 2;
 }

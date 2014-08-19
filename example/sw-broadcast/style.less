@@ -34,10 +34,10 @@ body {
 
   .setup-anim (@show; @hide) {
     &.ng-hide-add {
-      .lh-animation(@hide 1s);
+      .lh-animation(@hide 1s both);
     }
     &.ng-hide-remove {
-      .lh-animation(@show 1s);
+      .lh-animation(@show 1s 300ms both);
       z-index: 2;
     }
   }
