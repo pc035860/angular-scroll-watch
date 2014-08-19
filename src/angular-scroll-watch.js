@@ -2,7 +2,7 @@
 
   var DIR_STYLE = 'swStyle',
       DIR_CLASS = 'swClass',
-      DIR_BROADCAST = 'srBroadcast';
+      DIR_BROADCAST = 'swBroadcast';
 
   module
 
@@ -148,9 +148,10 @@
        */
       _handleBrdcst = function (local, config) {
         angular.forEach(config.brdcstList, function (v) {
-          var active = v.condition(config.scope, local);
+          var active = v.condition(config.scope, local), funcName;
           if (v.wasActive === null || active !== v.wasActive) {
-            config.brdcstScope.$broadcast(active, local);
+            funcName = config.brdcstIsEmit ? '$emit' : '$broadcast';
+            config.brdcstScope[funcName](v.event, active, local);
           }
           v.wasActive = active;
         });
@@ -293,16 +294,24 @@
       if (config.brdcstExpr) {
         var buf = config.scope.$eval(config.brdcstExpr);
 
-        if (buf.rootScope) {
+        if (buf.$rootScope) {
           config.brdcstScope = $rootScope;
-          delete buf.rootScope;
+          delete buf.$rootScope;
         }
         else {
           config.brdcstScope = config.scope;
         }
 
+        if (buf.$emit) {
+          config.brdcstIsEmit = true;
+          delete buf.$emit;
+        }
+        else {
+          config.brdcstIsEmit = false;
+        }
+
         config.brdcstList = [];
-        angular.forEach(buf, function (event, expr) {
+        angular.forEach(buf, function (expr, event) {
           config.brdcstList.push({
             condition: $parse(expr),
             event: event,
