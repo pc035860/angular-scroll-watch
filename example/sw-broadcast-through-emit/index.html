@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: sw-broadcast through $scope.$emit</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.min.css">
+    <link rel="stylesheet/less" type="text/css" href="style.less" />
+
+    <script src="//cdn.jsdelivr.net/less/1.7.3/less.min.js"></script>
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script src="//code.angularjs.org/1.2.22/angular-animate.js"></script>
+    <script src="../../src/angular-scroll-watch.js"></script>
+    <script src="../digest-count.js"></script>
+
+    <script>
+    angular.module('app', [
+      'ngAnimate',
+      'app.digest-count',
+      'pc035860.scrollWatch'
+    ])
+
+    .controller('MainCtrl', function ($scope, $log) {
+      angular.forEach([1, 2, 3, 4, 5], function (i) {
+        $scope.$on('slide' + i, onSlideChange);
+      });
+
+      function onSlideChange($evt, active, locals) {
+        $scope[$evt.name] = active;
+        $scope.$apply();
+      }
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0; z-index: 100;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+
+    <div id="scroll-stage"
+      scroll-watch="{from: 0, to: -1}"
+      sw-broadcast="{
+        $emit: true,
+
+        'slide1': '$percentage < 20',
+        'slide2': '$percentage >= 20 && $percentage < 40',
+        'slide3': '$percentage >= 40 && $percentage < 60',
+        'slide4': '$percentage >= 60 && $percentage < 80',
+        'slide5': '$percentage >= 80'
+      }">
+
+      <div class="slide slide--1" ng-show="slide1">
+        <h2>Slide 1</h2>
+      </div>
+      <div class="slide slide--2" ng-show="slide2">
+        <h2>Slide 2</h2>
+      </div>
+      <div class="slide slide--3" ng-show="slide3">
+        <h2>Slide 3</h2>
+      </div>
+      <div class="slide slide--4" ng-show="slide4">
+        <h2>Slide 4</h2>
+      </div>
+      <div class="slide slide--5" ng-show="slide5">
+        <h2>Slide 5</h2>
+      </div>
+
+    </div>
+  </body>
+
+</html>
