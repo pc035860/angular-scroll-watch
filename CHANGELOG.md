@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+- New directive attribute: `sw-broadcast`
+
 ## 0.1.1
 
 - Make a debounced scroll value update in `scrollWatchService.addConfig()`
