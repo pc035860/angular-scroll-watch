@@ -1,0 +1,66 @@
+@import "../lesshat-prefixed";
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#scroll-stage {
+  height: 5000px;
+}
+
+.slide {
+  .lh-size(100%);
+
+  position: fixed; z-index: 1;
+  left: 0;
+  top: 0;
+
+  color: white;
+
+  h2 {
+    .lh-translate(-50%, -50%);
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    font-size: 80px;
+  }
+
+  &.ng-hide-add, &.ng-hide-remove {
+    display: block !important;
+  }
+
+  .setup-anim (@show; @hide) {
+    &.ng-hide-add {
+      .lh-animation(@hide 1s);
+    }
+    &.ng-hide-remove {
+      .lh-animation(@show 1s);
+      z-index: 2;
+    }
+  }
+
+  &--1 {
+    .setup-anim(bounceIn; bounceOut);
+    background-color: #3498db;
+  }
+  &--2 {
+    .setup-anim(zoomInLeft; zoomOutRight);
+    background-color: #e74c3c;
+  }
+  &--3 {
+    .setup-anim(fadeInRight; fadeOutLeft);
+    background-color: #34495e;
+  }
+  &--4 {
+    .setup-anim(bounceInDown; bounceOutDown);
+    background-color: #1abc9c;
+  }
+  &--5 {
+    .setup-anim(zoomInUp; zoomOutUp);
+    background-color: #ecf0f1;
+    color: #333;
+  }
+}
