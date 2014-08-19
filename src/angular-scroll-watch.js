@@ -222,30 +222,30 @@
         };
 
         angular.forEach(self.configs, function (config) {
-          var lower, upper, localContext, progress;
+          var from, to, localContext, progress;
 
-          lower = config.lower < 0 ? positive(config.lower) : config.lower;
-          upper = config.upper < 0 ? positive(config.upper) : config.upper;
+          from = config.from < 0 ? positive(config.from) : config.from;
+          to = config.to < 0 ? positive(config.to) : config.to;
 
           /**
            * Create local context
            */
-          if (scrollTop < lower) {
+          if (scrollTop < from) {
             progress = 0;
             localContext = {
-              $positive: lower,
-              $negative: negative(lower)
+              $positive: from,
+              $negative: negative(from)
             };
           }
-          else if (scrollTop > upper) {
+          else if (scrollTop > to) {
             progress = 1;
             localContext = {
-              $positive: upper,
-              $negative: negative(upper)
+              $positive: to,
+              $negative: negative(to)
             };
           }
-          else if (scrollTop >= lower && scrollTop <= upper) {
-            progress = (scrollTop - lower) / (upper - lower);
+          else if (scrollTop >= from && scrollTop <= to) {
+            progress = (scrollTop - from) / (to - from);
             localContext = {
               $positive: scrollTop,
               $negative: negative(scrollTop)
@@ -319,7 +319,7 @@
     };
 
     this.addConfig = function (config) {
-      angular.forEach(['target', 'lower', 'upper'], function (key) {
+      angular.forEach(['target', 'from', 'to'], function (key) {
         if (angular.isUndefined(config[key])) {
           throw new Error('`'+ key +'` should be provided');
         }

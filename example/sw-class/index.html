@@ -25,8 +25,8 @@
     ])
 
     .controller('MainCtrl', function ($scope, $log) {
-      $scope.lower = 0;
-      $scope.upper = -1;
+      $scope.from = 0;
+      $scope.to = -1;
     });
     </script>
   </head>
@@ -41,13 +41,13 @@
     <div digest-count></div>
 
     <div id="scroll-stage"
-      scroll-watch="{lower: 0, upper: -1}"
+      scroll-watch="{from: 0, to: -1}"
       sw-style="{width: 100 * $progress + '%'}">
     </div>
 
     <h1 id="hero">
       <div class="hero__inner"
-        scroll-watch="{lower: 0, upper: -1}"
+        scroll-watch="{from: 0, to: -1}"
         sw-class="{
           p20 : $percentage > 20,
           p40 : $percentage > 40,

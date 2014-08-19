@@ -19,8 +19,8 @@
     angular.module('app', ['app.digest-count', 'pc035860.scrollWatch'])
 
     .controller('MainCtrl', function ($scope, $log) {
-      $scope.lower = 0;
-      $scope.upper = -1;
+      $scope.from = 0;
+      $scope.to = -1;
 
       $scope.rgb = function (p) {
         var num = Math.round(255 * p);
@@ -43,12 +43,12 @@
     <div digest-count></div>
 
     <div id="scroll-stage"
-      scroll-watch="{lower: lower, upper: upper}"
+      scroll-watch="{from: from, to: to}"
       sw-style="{backgroundColor: 'rgba(0, 0, 0, '+ 1 * $progress +')'}">
     </div>
 
     <h1 id="hero"
-      scroll-watch="{lower: 1250, upper: 3750}"
+      scroll-watch="{from: 1250, to: 3750}"
       sw-style="{
         textShadow: '0 0 20px rgba(' + rgb($progress) + ', 0.5)',
         color: 'rgb(' + rgb($progress) + ')'
