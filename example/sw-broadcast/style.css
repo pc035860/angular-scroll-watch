@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#scroll-stage {
+  height: 5000px;
+}
+.slide {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  color: white;
+}
+.slide h2 {
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  font-size: 80px;
+}
+.slide.ng-hide-add,
+.slide.ng-hide-remove {
+  display: block !important;
+}
+.slide--1 {
+  background-color: #3498db;
+}
+.slide--1.ng-hide-add {
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -o-animation: bounceOut 1s;
+  animation: bounceOut 1s;
+}
+.slide--1.ng-hide-remove {
+  -webkit-animation: bounceIn 1s;
+  -moz-animation: bounceIn 1s;
+  -o-animation: bounceIn 1s;
+  animation: bounceIn 1s;
+  z-index: 2;
+}
+.slide--2 {
+  background-color: #e74c3c;
+}
+.slide--2.ng-hide-add {
+  -webkit-animation: zoomOutRight 1s;
+  -moz-animation: zoomOutRight 1s;
+  -o-animation: zoomOutRight 1s;
+  animation: zoomOutRight 1s;
+}
+.slide--2.ng-hide-remove {
+  -webkit-animation: zoomInLeft 1s;
+  -moz-animation: zoomInLeft 1s;
+  -o-animation: zoomInLeft 1s;
+  animation: zoomInLeft 1s;
+  z-index: 2;
+}
+.slide--3 {
+  background-color: #34495e;
+}
+.slide--3.ng-hide-add {
+  -webkit-animation: fadeOutLeft 1s;
+  -moz-animation: fadeOutLeft 1s;
+  -o-animation: fadeOutLeft 1s;
+  animation: fadeOutLeft 1s;
+}
+.slide--3.ng-hide-remove {
+  -webkit-animation: fadeInRight 1s;
+  -moz-animation: fadeInRight 1s;
+  -o-animation: fadeInRight 1s;
+  animation: fadeInRight 1s;
+  z-index: 2;
+}
+.slide--4 {
+  background-color: #1abc9c;
+}
+.slide--4.ng-hide-add {
+  -webkit-animation: bounceOutDown 1s;
+  -moz-animation: bounceOutDown 1s;
+  -o-animation: bounceOutDown 1s;
+  animation: bounceOutDown 1s;
+}
+.slide--4.ng-hide-remove {
+  -webkit-animation: bounceInDown 1s;
+  -moz-animation: bounceInDown 1s;
+  -o-animation: bounceInDown 1s;
+  animation: bounceInDown 1s;
+  z-index: 2;
+}
+.slide--5 {
+  background-color: #ecf0f1;
+  color: #333;
+}
+.slide--5.ng-hide-add {
+  -webkit-animation: zoomOutUp 1s;
+  -moz-animation: zoomOutUp 1s;
+  -o-animation: zoomOutUp 1s;
+  animation: zoomOutUp 1s;
+}
+.slide--5.ng-hide-remove {
+  -webkit-animation: zoomInUp 1s;
+  -moz-animation: zoomInUp 1s;
+  -o-animation: zoomInUp 1s;
+  animation: zoomInUp 1s;
+  z-index: 2;
+}

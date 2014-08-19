@@ -6,10 +6,12 @@ var connect = require('gulp-connect'),
     livereload = require('gulp-livereload'),
     uglify = require('gulp-uglify'),
     jshint = require('gulp-jshint'),
-    // changed = require('gulp-changed'),
+    changed = require('gulp-changed'),
+    cache = require('gulp-cached'),
     rename = require('gulp-rename'),
     annotate = require('gulp-ng-annotate'),
-    header = require('gulp-header');
+    header = require('gulp-header'),
+    less = require('gulp-less');
 
 var pkg = require('./package.json');
 
@@ -23,9 +25,6 @@ var getTodayStr = function () {
 };
 
 var config = {
-  watch: {
-    example: 'example/{,**/}*.{js,html,css,less}'
-  },
   appRoot: '',
   src: 'src/angular-scroll-watch.js',
   buildDir: 'build',
@@ -66,17 +65,25 @@ gulp.task('watch:example', function () {
 
   var paths = [
     config.src,
-    config.watch.example
+    'example/{,**/}*.{js,html,css}',
+    'example/*/*.less'
   ];
-  gulp.watch(paths, ['lint:example'])
+  gulp.watch(paths, ['lint:example', 'less:example'])
     .on('change', livereload.changed);
 });
 gulp.task('lint:example', function () {
-  return gulp.src('example/{,**/}*.js', {base: './'})
+  return gulp.src('example/{,**/}*.{html,js}', {base: './'})
+    .pipe(cache('lint-example'))
+    .pipe(jshint.extract('auto'))
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
-
+gulp.task('less:example', function () {
+  return gulp.src('example/*/*.less', {base: './'})
+    .pipe(changed('./', {extension: '.css'}))
+    .pipe(less())
+    .pipe(gulp.dest('./'));
+});
 
 gulp.task('default', ['build']);
 gulp.task('example', ['server', 'watch', 'watch:example']);

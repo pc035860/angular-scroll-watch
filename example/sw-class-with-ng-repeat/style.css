@@ -1,0 +1,301 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#scroll-stage {
+  background-color: #333;
+  height: 10000px;
+}
+#form {
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 230px;
+  -webkit-border-radius: 5px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 5px;
+  -moz-background-clip: padding;
+  border-radius: 5px;
+  background-clip: padding-box;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+  text-align: center;
+  padding: 0 30px;
+  background-color: rgba(177, 161, 120, 0.42);
+}
+#form h2 {
+  margin-bottom: 20px;
+  color: #ffd16e;
+  text-shadow: 0 1px 1px #553e03;
+}
+#form input {
+  height: 120px;
+  font-size: 80px;
+  text-align: center;
+}
+#angular-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+#angular-container .angular {
+  position: absolute;
+}
+#angular-container .angular img {
+  opacity: 0.8;
+}
+#angular-container .anim-1 {
+  display: none;
+}
+#angular-container .anim-1.in-view {
+  display: block;
+}
+#angular-container .anim-1.in-view-add {
+  -webkit-animation: bounceInDown 1s both;
+  -moz-animation: bounceInDown 1s both;
+  -o-animation: bounceInDown 1s both;
+  animation: bounceInDown 1s both;
+}
+#angular-container .anim-1.in-view-remove {
+  -webkit-animation: bounceOutDown 1s both;
+  -moz-animation: bounceOutDown 1s both;
+  -o-animation: bounceOutDown 1s both;
+  animation: bounceOutDown 1s both;
+  display: block;
+}
+#angular-container .anim-2 {
+  display: none;
+}
+#angular-container .anim-2.in-view {
+  display: block;
+}
+#angular-container .anim-2.in-view-add {
+  -webkit-animation: bounceInRight 1s both;
+  -moz-animation: bounceInRight 1s both;
+  -o-animation: bounceInRight 1s both;
+  animation: bounceInRight 1s both;
+}
+#angular-container .anim-2.in-view-remove {
+  -webkit-animation: bounceOutLeft 1s both;
+  -moz-animation: bounceOutLeft 1s both;
+  -o-animation: bounceOutLeft 1s both;
+  animation: bounceOutLeft 1s both;
+  display: block;
+}
+#angular-container .anim-3 {
+  display: none;
+}
+#angular-container .anim-3.in-view {
+  display: block;
+}
+#angular-container .anim-3.in-view-add {
+  -webkit-animation: bounceInUp 1s both;
+  -moz-animation: bounceInUp 1s both;
+  -o-animation: bounceInUp 1s both;
+  animation: bounceInUp 1s both;
+}
+#angular-container .anim-3.in-view-remove {
+  -webkit-animation: bounceOutUp 1s both;
+  -moz-animation: bounceOutUp 1s both;
+  -o-animation: bounceOutUp 1s both;
+  animation: bounceOutUp 1s both;
+  display: block;
+}
+#angular-container .anim-4 {
+  display: none;
+}
+#angular-container .anim-4.in-view {
+  display: block;
+}
+#angular-container .anim-4.in-view-add {
+  -webkit-animation: fadeInDown 1s both;
+  -moz-animation: fadeInDown 1s both;
+  -o-animation: fadeInDown 1s both;
+  animation: fadeInDown 1s both;
+}
+#angular-container .anim-4.in-view-remove {
+  -webkit-animation: fadeOutDown 1s both;
+  -moz-animation: fadeOutDown 1s both;
+  -o-animation: fadeOutDown 1s both;
+  animation: fadeOutDown 1s both;
+  display: block;
+}
+#angular-container .anim-5 {
+  display: none;
+}
+#angular-container .anim-5.in-view {
+  display: block;
+}
+#angular-container .anim-5.in-view-add {
+  -webkit-animation: fadeInRight 1s both;
+  -moz-animation: fadeInRight 1s both;
+  -o-animation: fadeInRight 1s both;
+  animation: fadeInRight 1s both;
+}
+#angular-container .anim-5.in-view-remove {
+  -webkit-animation: fadeOutLeft 1s both;
+  -moz-animation: fadeOutLeft 1s both;
+  -o-animation: fadeOutLeft 1s both;
+  animation: fadeOutLeft 1s both;
+  display: block;
+}
+#angular-container .anim-6 {
+  display: none;
+}
+#angular-container .anim-6.in-view {
+  display: block;
+}
+#angular-container .anim-6.in-view-add {
+  -webkit-animation: fadeInUp 1s both;
+  -moz-animation: fadeInUp 1s both;
+  -o-animation: fadeInUp 1s both;
+  animation: fadeInUp 1s both;
+}
+#angular-container .anim-6.in-view-remove {
+  -webkit-animation: fadeOutUp 1s both;
+  -moz-animation: fadeOutUp 1s both;
+  -o-animation: fadeOutUp 1s both;
+  animation: fadeOutUp 1s both;
+  display: block;
+}
+#angular-container .anim-7 {
+  display: none;
+}
+#angular-container .anim-7.in-view {
+  display: block;
+}
+#angular-container .anim-7.in-view-add {
+  -webkit-animation: rotateIn 1s both;
+  -moz-animation: rotateIn 1s both;
+  -o-animation: rotateIn 1s both;
+  animation: rotateIn 1s both;
+}
+#angular-container .anim-7.in-view-remove {
+  -webkit-animation: rotateOut 1s both;
+  -moz-animation: rotateOut 1s both;
+  -o-animation: rotateOut 1s both;
+  animation: rotateOut 1s both;
+  display: block;
+}
+#angular-container .anim-8 {
+  display: none;
+}
+#angular-container .anim-8.in-view {
+  display: block;
+}
+#angular-container .anim-8.in-view-add {
+  -webkit-animation: flipInX 1s both;
+  -moz-animation: flipInX 1s both;
+  -o-animation: flipInX 1s both;
+  animation: flipInX 1s both;
+}
+#angular-container .anim-8.in-view-remove {
+  -webkit-animation: flipOutX 1s both;
+  -moz-animation: flipOutX 1s both;
+  -o-animation: flipOutX 1s both;
+  animation: flipOutX 1s both;
+  display: block;
+}
+#angular-container .anim-9 {
+  display: none;
+}
+#angular-container .anim-9.in-view {
+  display: block;
+}
+#angular-container .anim-9.in-view-add {
+  -webkit-animation: flipInY 1s both;
+  -moz-animation: flipInY 1s both;
+  -o-animation: flipInY 1s both;
+  animation: flipInY 1s both;
+}
+#angular-container .anim-9.in-view-remove {
+  -webkit-animation: flipOutY 1s both;
+  -moz-animation: flipOutY 1s both;
+  -o-animation: flipOutY 1s both;
+  animation: flipOutY 1s both;
+  display: block;
+}
+#angular-container .anim-10 {
+  display: none;
+}
+#angular-container .anim-10.in-view {
+  display: block;
+}
+#angular-container .anim-10.in-view-add {
+  -webkit-animation: zoomInDown 1s both;
+  -moz-animation: zoomInDown 1s both;
+  -o-animation: zoomInDown 1s both;
+  animation: zoomInDown 1s both;
+}
+#angular-container .anim-10.in-view-remove {
+  -webkit-animation: zoomOutDown 1s both;
+  -moz-animation: zoomOutDown 1s both;
+  -o-animation: zoomOutDown 1s both;
+  animation: zoomOutDown 1s both;
+  display: block;
+}
+#angular-container .anim-11 {
+  display: none;
+}
+#angular-container .anim-11.in-view {
+  display: block;
+}
+#angular-container .anim-11.in-view-add {
+  -webkit-animation: zoomInRight 1s both;
+  -moz-animation: zoomInRight 1s both;
+  -o-animation: zoomInRight 1s both;
+  animation: zoomInRight 1s both;
+}
+#angular-container .anim-11.in-view-remove {
+  -webkit-animation: zoomOutLeft 1s both;
+  -moz-animation: zoomOutLeft 1s both;
+  -o-animation: zoomOutLeft 1s both;
+  animation: zoomOutLeft 1s both;
+  display: block;
+}
+#angular-container .anim-12 {
+  display: none;
+}
+#angular-container .anim-12.in-view {
+  display: block;
+}
+#angular-container .anim-12.in-view-add {
+  -webkit-animation: zoomInUp 1s both;
+  -moz-animation: zoomInUp 1s both;
+  -o-animation: zoomInUp 1s both;
+  animation: zoomInUp 1s both;
+}
+#angular-container .anim-12.in-view-remove {
+  -webkit-animation: zoomOutUp 1s both;
+  -moz-animation: zoomOutUp 1s both;
+  -o-animation: zoomOutUp 1s both;
+  animation: zoomOutUp 1s both;
+  display: block;
+}
+#angular-container .anim-13 {
+  display: none;
+}
+#angular-container .anim-13.in-view {
+  display: block;
+}
+#angular-container .anim-13.in-view-add {
+  -webkit-animation: rollIn 1s both;
+  -moz-animation: rollIn 1s both;
+  -o-animation: rollIn 1s both;
+  animation: rollIn 1s both;
+}
+#angular-container .anim-13.in-view-remove {
+  -webkit-animation: rollOut 1s both;
+  -moz-animation: rollOut 1s both;
+  -o-animation: rollOut 1s both;
+  animation: rollOut 1s both;
+  display: block;
+}
