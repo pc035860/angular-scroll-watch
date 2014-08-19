@@ -2,7 +2,7 @@
 
   var DIR_STYLE = 'swStyle',
       DIR_CLASS = 'swClass',
-      DIR_ON = 'srOn';
+      DIR_BROADCAST = 'srBroadcast';
 
   module
 
@@ -77,7 +77,7 @@
           _handleClass, _addClasses, _removeClasses, 
           _digestClassCounts, _updateClasses,
 
-          _handleBreakpoint;
+          _handleBrdcst;
 
       /**
        * Style related functions
@@ -144,62 +144,15 @@
       };
 
       /**
-       * Breakpoint related functions
+       * Broadcast condition -> event
        */
-      _handleBreakpoint = function (local, config) {
-        var matchCondition = function (condition) {
-          var m, op, mod, number, thresholdKey,
-              eq, lt, gt, le, ge;
-
-          if ((m = condition.match(reBpCond)) === null) {
-            $log.warn('condition syntax error', condition);
-            return false;
+      _handleBrdcst = function (local, config) {
+        angular.forEach(config.brdcstList, function (v) {
+          var active = v.condition(config.scope, local);
+          if (v.wasActive === null || active !== v.wasActive) {
+            config.brdcstScope.$broadcast(active, local);
           }
-
-          /**
-           * Perl operator like functions
-           */
-          eq = function (a, b) {
-            return a == b;
-          };
-          lt = function (a, b) {
-            return a < b;
-          };
-          gt = function (a, b) {
-            return a > b;
-          };
-          le = function (a, b) {
-            return a <= b;
-          };
-          ge = function (a, b) {
-            return a >= b;
-          };
-
-          op = {
-            '=': eq, '<': lt, '>': gt, '<=': le, '>=': ge
-          }[m[1]];
-          mod = m[2] || null;
-          number = Number(m[3]);
-
-          thresholdKey = '$positive';
-          if (mod === 'p') {
-            thresholdKey = '$progress';
-          }
-          else if (mod === '-') {
-            thresholdKey = '$negative';
-            number = -number;
-          }
-
-          return op(local[thresholdKey], number);
-        };
-
-        angular.forEach(config.onGetterList, function (v) {
-          var match = matchCondition(v.condition);
-          if (match && match !== v.lastMatch) {
-            v.getter(config.scope, local);
-            (config.localDigest ? config.scope : $rootScope).$digest();
-          }
-          v.lastMatch = match;
+          v.wasActive = active;
         });
       };
 
@@ -279,8 +232,8 @@
           }
 
           // trigger breakpoints
-          if (config.onGetterList) {
-            _handleBreakpoint(localContext, config);
+          if (config.brdcstList) {
+            _handleBrdcst(localContext, config);
           }
 
           config._lastProgress = progress;
@@ -337,15 +290,23 @@
       if (config.classExpr) {
         config.classGetter = $parse(config.classExpr);
       }
-      if (config.onExpr) {
-        config.localDigest = !!config.localDigest;
+      if (config.brdcstExpr) {
+        var buf = config.scope.$eval(config.brdcstExpr);
 
-        config.onGetterList = [];
-        angular.forEach($parse(config.onExpr)({}), function (v, k) {
-          config.onGetterList.push({
-            condition: k,
-            getter: $parse(v),
-            lastMatch: false
+        if (buf.rootScope) {
+          config.brdcstScope = $rootScope;
+          delete buf.rootScope;
+        }
+        else {
+          config.brdcstScope = config.scope;
+        }
+
+        config.brdcstList = [];
+        angular.forEach(buf, function (event, expr) {
+          config.brdcstList.push({
+            condition: $parse(expr),
+            event: event,
+            wasActive: null
           });
         });
       }
@@ -382,7 +343,7 @@
       link: function postLink(scope, iElm, iAttrs) {
         var configId;
 
-        if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_ON]) {
+        if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_BROADCAST]) {
           scope.$watch(iAttrs.scrollWatch, function (config) {
             if (config && angular.isObject(config)) {
               if (configId) {
@@ -401,8 +362,8 @@
                 config.attr = iAttrs;
               }
 
-              if (iAttrs[DIR_ON]) {
-                config.onExpr = iAttrs[DIR_ON];
+              if (iAttrs[DIR_BROADCAST]) {
+                config.brdcstExpr = iAttrs[DIR_BROADCAST];
               }
 
               configId = scrollWatchService.addConfig(config);
