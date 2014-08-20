@@ -14,3 +14,7 @@
 
 - [Basic](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast/)
 - [Through `$scope.$emit`](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast-through-emit/)
+
+### Digest hook
+
+- [Digest hook](http://pc035860.github.com/angular-scroll-watch/example/digest-hook/)
