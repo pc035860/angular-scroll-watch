@@ -67,7 +67,7 @@
       return $window.pageYOffset;
     };
 
-    var updatePoint = (function () {
+    var digest = (function () {
       var anim;
 
       var reBpCond = /((?:>|<)?=?)\s*?((?:-(?!p))|(?:p(?!-)))?(\d+)/;
@@ -157,8 +157,8 @@
         });
       };
 
-      function _update () {
-        var positive, negative, numReverse;
+      function _update(configId) {
+        var positive, negative, numReverse, processConfig;
 
         var w_h = getWindowHeight(),
             d_h = getDocumentHeight(),
@@ -175,7 +175,7 @@
           return (num > 0) ? negative(num) : positive(num);
         };
 
-        angular.forEach(self.configs, function (config) {
+        processConfig = function (config) {
           var from, to, localContext, progress;
 
           from = config.from < 0 ? positive(config.from) : config.from;
@@ -238,27 +238,33 @@
           }
 
           config._lastProgress = progress;
+        };
 
-        });
+        if (angular.isUndefined(configId)) {
+          angular.forEach(self.configs, processConfig);
+        }
+        else if (self.configs[configId]) {
+          processConfig(self.configs[configId]);
+        }
       }
 
       anim = false;
 
-      return function () {
-        if (anim) {
+      return function ($event, configId) {
+        if (anim && angular.isUndefined(configId)) {
           return;
         }
 
         anim = true;
 
         requestAnimFrame(function () {
-          _update();
+          _update(configId);
 
           anim = false;
         });
       };
     }());
-    var updatePointDebounced = debounce(updatePoint, 50);
+    var digestDebounced = debounce(digest, 50);
 
     this._configId = 0;
 
@@ -268,8 +274,8 @@
       this.configs = {};
 
       $win
-      .bind('scroll', updatePoint)
-      .bind('resize', updatePoint);
+      .bind('scroll', digest)
+      .bind('resize', digest);
     };
 
     this.addConfig = function (config) {
@@ -322,7 +328,7 @@
 
       this.configs[this._configId] = config;
 
-      updatePointDebounced();
+      digestDebounced();
 
       return this._configId;
     };
@@ -337,53 +343,70 @@
       }
     };
 
+    this.digest = function (configId) {
+      digest(null, configId);
+    };
+
     this.destroy = function () {
       this.configs = null;
 
       $win
-      .unbind('scroll', updatePoint)
-      .unbind('resize', updatePoint);
+      .unbind('scroll', digest)
+      .unbind('resize', digest);
     };
   })
 
-  .directive('scrollWatch', function (scrollWatchService) {
+  .directive('scrollWatch', function (scrollWatchService, $parse) {
     return {
       restrict: 'A',
       link: function postLink(scope, iElm, iAttrs) {
-        var configId;
+        var configId, deregisterDigestHook;
 
         if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_BROADCAST]) {
-          scope.$watch(iAttrs.scrollWatch, function (config) {
-            if (config && angular.isObject(config)) {
-              if (configId) {
-                scrollWatchService.removeConfig(configId);
-              }
-
-              config.target = iElm;
-              config.scope = scope;
-
-              if (iAttrs[DIR_STYLE]) {
-                config.styleExpr = iAttrs[DIR_STYLE];
-              }
-
-              if (iAttrs[DIR_CLASS]) {
-                config.classExpr = iAttrs[DIR_CLASS];
-                config.attr = iAttrs;
-              }
-
-              if (iAttrs[DIR_BROADCAST]) {
-                config.brdcstExpr = iAttrs[DIR_BROADCAST];
-              }
-
-              configId = scrollWatchService.addConfig(config);
-            }
-          }, true);
+          scope.$watch(iAttrs.scrollWatch, scrollWatchChange, true);
 
           iElm.on('$destroy', function () {
             if (configId) {
               scrollWatchService.removeConfig(configId);
             }
           });
+        }
+
+        function scrollWatchChange(config) {
+          if (config && angular.isObject(config)) {
+            if (configId) {
+              scrollWatchService.removeConfig(configId);
+              (deregisterDigestHook || angular.noop)();
+            }
+
+            config.target = iElm;
+            config.scope = scope;
+
+            if (iAttrs[DIR_STYLE]) {
+              config.styleExpr = iAttrs[DIR_STYLE];
+            }
+
+            if (iAttrs[DIR_CLASS]) {
+              config.classExpr = iAttrs[DIR_CLASS];
+              config.attr = iAttrs;
+            }
+
+            if (iAttrs[DIR_BROADCAST]) {
+              config.brdcstExpr = iAttrs[DIR_BROADCAST];
+            }
+
+            if (config.digest) {
+              deregisterDigestHook = scope.$watch(digestHook);
+            }
+
+            configId = scrollWatchService.addConfig(config);
+          }
+        }
+
+        function digestHook () {
+          if (configId) {
+            scrollWatchService.digest(configId);
+          }
         }
       }
     };
