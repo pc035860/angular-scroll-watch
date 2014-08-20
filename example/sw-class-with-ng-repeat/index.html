@@ -94,7 +94,8 @@
         sw-class="{'in-view': $percentage > item.showAt && $percentage < item.hideAt}">
         <img src="AngularJS-Shield-medium.png" alt="angularjs shield"
           ng-style="{
-            transform: 'scale('+ item.scale +')'
+            '-webkit-transform': 'scale('+ item.scale +')',
+            'transform': 'scale('+ item.scale +')'
           }">
       </div>
     </div>
