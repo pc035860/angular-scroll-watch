@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: digest hook</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script src="../../src/angular-scroll-watch.js"></script>
+    <script src="../digest-count.js"></script>
+
+    <script>
+    angular.module('app', ['app.digest-count', 'pc035860.scrollWatch'])
+
+    .controller('MainCtrl', function ($scope, $log) {
+      $scope.from = 0;
+      $scope.to = -1;
+
+      $scope.scaleFactor = 2;
+
+      $scope.rand = function () {
+        $scope.scaleFactor = (Math.random() * 3 + 2).toFixed(2);
+      };
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+
+    <div id="scroll-stage"
+      scroll-watch="{from: from, to: to}"
+      sw-style="{backgroundColor: 'rgba(0, 0, 0, '+ 1 * $progress +')'}">
+    </div>
+
+    <div id="hero">
+      <div scroll-watch="{from: from, to: to, digest: true}"
+        sw-style="{
+          '-webkit-transform': 'scale('+ (0.5 + 0.5 * $progress) * scaleFactor + ')',
+          'transform': 'scale(' + (0.5 + 0.5 * $progress) * scaleFactor + ')'
+        }">
+
+        <p>Scale factor: {{ scaleFactor }}</p>
+        <button class="btn btn-success btn-large" ng-click="rand()">Rand</button>
+      </div>
+    </div>
+  </body>
+
+</html>
