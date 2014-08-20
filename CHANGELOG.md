@@ -1,14 +1,18 @@
 # Changelog
 
-## 0.2.0
+## v0.3.0
+
+- Introduce **digest hook** as `digest` in `scroll-watch` configs
+
+## v0.2.0
 
 - New directive attribute: `sw-broadcast`
 
-## 0.1.1
+## v0.1.1
 
 - Make a debounced scroll value update in `scrollWatchService.addConfig()`
 - Correctly remove the config on element destruction
 
-## 0.1.0
+## v0.1.0
 
 - First release
