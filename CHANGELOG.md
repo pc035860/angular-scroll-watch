@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.0
+
+- Rename the **digest hook** config to `digestSync`
+
 ## v0.3.0
 
 - Introduce **digest hook** as `digest` in `scroll-watch` configs
