@@ -12,13 +12,15 @@
 
     <script src="//code.angularjs.org/1.2.22/angular.js"></script>
     <script src="//code.angularjs.org/1.2.22/angular-animate.js"></script>
-    <script src="../../src/angular-scroll-watch.js"></script>
-    <script src="../digest-count.js"></script>
+    <script to-plunker src="../../src/angular-scroll-watch.js"></script>
+    <script to-plunker src="../assets/digest-count.js"></script>
+    <script to-plunker src="../assets/edit-on-plunker.js"></script>
 
     <script>
     angular.module('app', [
       'ngAnimate',
       'app.digest-count',
+      'app.edit-on-plunker',
       'pc035860.scrollWatch'
     ])
 
@@ -46,6 +48,9 @@
 
     <!-- digest count -->
     <div digest-count></div>
+    <!-- edit on plunker -->
+    <edit-on-plunker files="['index.html', 'style.css']"
+      tags="['angularjs', 'scroll', 'angular-scroll-watch']"></edit-on-plunker>
 
     <div id="scroll-stage" ng-controller="StageCtrl"
       scroll-watch="{from: 0, to: -1}"
