@@ -77,7 +77,7 @@
           _handleClass, _addClasses, _removeClasses, 
           _digestClassCounts, _updateClasses,
 
-          _handleBrdcst;
+          _handleBrdcst, _apply;
 
       /**
        * Style related functions
@@ -146,12 +146,24 @@
       /**
        * Broadcast condition -> event
        */
+      _apply = function (scope, fn) {
+        var phase = scope.$root.$$phase;
+        if(phase == '$apply' || phase == '$digest') {
+          if(fn && (typeof(fn) === 'function')) {
+            fn();
+          }
+        } else {
+          scope.$apply(fn);
+        }
+      };
       _handleBrdcst = function (local, config) {
         angular.forEach(config.brdcstList, function (v) {
           var active = v.condition(config.scope, local), funcName;
           if (v.wasActive === null || active !== v.wasActive) {
             funcName = config.brdcstIsEmit ? '$emit' : '$broadcast';
-            config.brdcstScope[funcName](v.event, active, local);
+            _apply(config.brdcstScope, function () {
+              config.brdcstScope[funcName](v.event, active, local);
+            });
           }
           v.wasActive = active;
         });
