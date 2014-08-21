@@ -372,7 +372,7 @@
     return {
       restrict: 'A',
       link: function postLink(scope, iElm, iAttrs) {
-        var configId, deregisterDigestHook;
+        var configId, deregisterDigestSync;
 
         if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_BROADCAST]) {
           scope.$watch(iAttrs.scrollWatch, scrollWatchChange, true);
@@ -388,7 +388,7 @@
           if (config && angular.isObject(config)) {
             if (configId) {
               scrollWatchService.removeConfig(configId);
-              (deregisterDigestHook || angular.noop)();
+              (deregisterDigestSync || angular.noop)();
             }
 
             config.target = iElm;
@@ -407,15 +407,15 @@
               config.brdcstExpr = iAttrs[DIR_BROADCAST];
             }
 
-            if (config.digest) {
-              deregisterDigestHook = scope.$watch(digestHook);
+            if (config.digestSync) {
+              deregisterDigestSync = scope.$watch(digestSync);
             }
 
             configId = scrollWatchService.addConfig(config);
           }
         }
 
-        function digestHook () {
+        function digestSync () {
           if (configId) {
             scrollWatchService.digest(configId);
           }
