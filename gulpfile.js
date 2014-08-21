@@ -79,7 +79,7 @@ gulp.task('lint:example', function () {
     .pipe(jshint.reporter('jshint-stylish'));
 });
 gulp.task('less:example', function () {
-  return gulp.src('example/*/*.less', {base: './'})
+  return gulp.src('example/*/style.less', {base: './'})
     .pipe(changed('./', {extension: '.css'}))
     .pipe(less())
     .pipe(gulp.dest('./'));
