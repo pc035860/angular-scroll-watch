@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: sw-stage</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script to-plunker src="../../src/angular-scroll-watch.js"></script>
+    <script to-plunker src="../assets/digest-count.js"></script>
+    <script to-plunker src="../assets/edit-on-plunker.js"></script>
+
+    <script>
+    angular.module('app', [
+      'app.digest-count', 
+      'app.edit-on-plunker',
+      'pc035860.scrollWatch'
+    ])
+
+    .controller('MainCtrl', function ($scope, $timeout, $log, $window) {
+      $scope.runAnim = true;
+
+      $scope.$on('speedChange', debounce(onSpeedChange, 100));
+
+      function onSpeedChange($evt, active, local) {
+        $scope.runAnim = false;
+        $scope.$digest();
+
+        $timeout(function () {
+          $scope.runAnim = true;
+        }, 20);
+      }
+
+      function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+          var context = this, args = arguments;
+          $window.clearTimeout(timeout);
+          timeout = $window.setTimeout(function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+          }, wait);
+          if (immediate && !timeout) func.apply(context, args);
+        };
+      }
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+    <!-- edit on plunker -->
+    <edit-on-plunker files="['index.html', 'style.css']"
+      tags="['angularjs', 'scroll', 'angular-scroll-watch']"></edit-on-plunker>
+
+
+    <div id="wrap">
+      <div class="shield-holder"
+        scroll-watch="{from: 0, to: -1, stage: 'size control'}"
+        sw-style="{
+          '-webkit-transform': 'scale('+ (0.6 + 0.6 * $progress) +')',
+          'transform': 'scale('+ (0.6 + 0.6 * $progress) +')'
+        }">
+
+        <img src="https://rawgit.com/angular/angular.js/master/images/logo/AngularJS-Shield.exports/AngularJS-Shield-large.png" alt="angularjs shield"
+          ng-class="{anim: runAnim}"
+          scroll-watch="{from: 0, to: -1, stage: 'speed control'}"
+          sw-style="{
+            '-webkit-animation-duration': (100 + 3900 * (1 - $progress)) + 'ms',
+            'animation-duration': (100 + 3900 * (1 - $progress)) + 'ms'
+          }"
+          sw-broadcast="{
+            $rootScope: true,
+
+            'speedChange': true
+          }">
+      </div>
+
+      <div class="speed-control" sw-stage="speed control" title="speed control">
+        <div class="speed-control__height"></div>
+      </div>
+
+      <div class="size-control" sw-stage="size control" title="size control">
+        <div class="size-control__height"></div>
+      </div>
+    </div>
+  </body>
+
+</html>

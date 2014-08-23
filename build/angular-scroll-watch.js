@@ -2,16 +2,18 @@
 
   var DIR_STYLE = 'swStyle',
       DIR_CLASS = 'swClass',
-      DIR_BROADCAST = 'swBroadcast';
+      DIR_BROADCAST = 'swBroadcast',
+      DIR_STAGE = 'swStage';
+
+  var STAGE_NAME_DEFAULT = 'pc035860';
+
+  var CACHE_ID_STAGE_POOL = 'scrollWatch.stages';
 
   module
 
-  .service('scrollWatchService', 
-  ["$window", "$document", "$parse", "$log", "$rootScope", "$animate", function scrollWatchService($window, $document, $parse, $log, $rootScope, $animate) {
-    var self = this;
-
-    var $win = angular.element($window);
-
+  .factory('scrollWatchStageFactory', ["$window", "$document", "$parse", "$log", "$rootScope", "$animate", function (
+    $window, $document, $parse, $log, $rootScope, $animate
+  ) {
     // ref: http://davidwalsh.name/function-debounce
     var debounce = function (func, wait, immediate) {
       var timeout;
@@ -37,39 +39,185 @@
               };
     })();
 
-    var objectSize = function (obj) {
-      var c = 0;
-      angular.forEach(obj, function () {
-        c++;
-      });
-      return c;
+    var $win = angular.element($window);
+
+    /**
+     * Stage class
+     */
+    var Stage = function (name, $elm) {
+      this.init(name, $elm);
     };
 
-    var getDocumentHeight = function () {
-      var doc = $document[0].documentElement,
-          body = $document[0].body;
+    var p = Stage.prototype;
 
-      return Math.max(
-        body.scrollHeight, doc.scrollHeight,
-        body.offsetHeight, doc.offsetHeight,
-        doc.clientHeight
-      );
+    p.name = null;
+    p.element = null;
+    p.configs = null;
+    p._configId = 0;
+    p._binded = false;
+
+    p.init = function (name, $elm) {
+      this.name = name;
+      this.element = $elm || null;
+
+      this.scrollHandler = this._digest.bind(this);
+      this._digestDebounced = debounce(this._digest, 50);
+
+      this._digestDebounced();
     };
-    var getWindowHeight = function () {
-      var h1 = $document[0].documentElement.clientHeight,
-          h2 = $window.innerHeight;
-      if (h1 > h2) {
-        return h2;
+
+    p.setElement = function ($elm) {
+      this.element = $elm;
+      
+      if (this.configs !== null && !this._binded) {
+        this._bind(this.element);
       }
-      return h1;
-    };
-    var getWindowScrollTop = function () {
-      return $window.pageYOffset;
+
+      this._digestDebounced();
     };
 
-    var digest = (function () {
-      var anim;
+    p.clearElement = function () {
+      if (this._binded) {
+        this._unbind(this.element);
+      }
+      this.element = null;
+    };
 
+    p.addConfig = function (config) {
+      angular.forEach(['target', 'from', 'to'], function (key) {
+        if (angular.isUndefined(config[key])) {
+          throw new Error('`'+ key +'` should be provided');
+        }
+      });
+
+      if (this.configs === null) {
+        this.configs = {};
+
+        if (this.element !== null) {
+          this._bind(this.element);
+        }
+      }
+
+      this._configId++;
+
+      if (config.styleExpr) {
+        config.styleGetter = $parse(config.styleExpr);
+      }
+      if (config.classExpr) {
+        config.classGetter = $parse(config.classExpr);
+      }
+      if (config.brdcstExpr) {
+        var buf = config.scope.$eval(config.brdcstExpr);
+
+        if (buf.$rootScope) {
+          config.brdcstScope = $rootScope;
+          delete buf.$rootScope;
+        }
+        else {
+          config.brdcstScope = config.scope;
+        }
+
+        if (buf.$emit) {
+          config.brdcstIsEmit = true;
+          delete buf.$emit;
+        }
+        else {
+          config.brdcstIsEmit = false;
+        }
+
+        config.brdcstList = [];
+        angular.forEach(buf, function (expr, event) {
+          var pack = {
+            event: event
+          };
+
+          if (!angular.isString(expr)) {
+            pack.always = true;
+          }
+          else {
+            pack.condition = $parse(expr);
+            pack.wasActive = null;
+          }
+
+          config.brdcstList.push(pack);
+        });
+      }
+
+      this.configs[this._configId] = config;
+
+      this._digestDebounced();
+
+      return this._configId;
+    };
+
+    p.removeConfig = function (configId) {
+      if (this.configs && this.configs[configId]) {
+        delete this.configs[configId];
+        
+        if (objectSize(this.configs) === 0) {
+          this.configs = null;
+
+          if (this.element !== null) {
+            this._unbind(this.element);
+          }
+        }
+      }
+    };
+
+    p.digest = function (configId) {
+      this._digest(null, configId);
+    };
+
+    p.destroy = function () {
+      this._unbind(this.element);
+      this.configs = null;
+      this.element = null;
+      this.scrollHandler = null;
+      this._digestDebounced = null;
+    };
+
+    p.couldDestroy = function () {
+      return this.element === null && this.configs === null;
+    };
+
+    p._isDefault = function () {
+      return this.element[0] === $window;
+    };
+
+    p._contentHeight = function () {
+      if (this._isDefault()) {
+        var doc = $document[0].documentElement,
+            body = $document[0].body;
+
+        return Math.max(
+          body.scrollHeight, doc.scrollHeight,
+          body.offsetHeight, doc.offsetHeight,
+          doc.clientHeight
+        );
+      }
+      return this.element[0].scrollHeight;
+    };
+
+    p._containerHeight = function () {
+      if (this._isDefault()) {
+        var h1 = $document[0].documentElement.clientHeight,
+            h2 = $window.innerHeight;
+        if (h1 > h2) {
+          return h2;
+        }
+        return h1;
+      }
+      return this.element[0].offsetHeight;
+    };
+
+    p._scrollTop = function () {
+      if (this._isDefault()) {
+        return $window.pageYOffset;
+      }
+      return this.element[0].scrollTop;
+    };
+
+    p._digest = (function () {
       var reBpCond = /((?:>|<)?=?)\s*?((?:-(?!p))|(?:p(?!-)))?(\d+)/;
 
       var _handleStyle,
@@ -158,24 +306,34 @@
       };
       _handleBrdcst = function (local, config) {
         angular.forEach(config.brdcstList, function (v) {
-          var active = v.condition(config.scope, local), funcName;
-          if (v.wasActive === null || active !== v.wasActive) {
-            funcName = config.brdcstIsEmit ? '$emit' : '$broadcast';
-            _apply(config.brdcstScope, function () {
-              config.brdcstScope[funcName](v.event, active, local);
-            });
+          var active, funcName;
+
+          funcName = config.brdcstIsEmit ? '$emit' : '$broadcast';
+
+          if (v.always) {
+            config.brdcstScope[funcName](v.event, null, local);
           }
-          v.wasActive = active;
+          else if (v.condition) {
+            active = v.condition(config.scope, local);
+            if (v.wasActive === null || active !== v.wasActive) {
+              _apply(config.brdcstScope, function () {
+                config.brdcstScope[funcName](v.event, active, local);
+              });
+            }
+            v.wasActive = active;
+          }
         });
       };
 
       function _update(configId) {
         var positive, negative, numReverse, processConfig;
 
-        var w_h = getWindowHeight(),
-            d_h = getDocumentHeight(),
+        var self = this;
+
+        var w_h = this._containerHeight(),
+            d_h = this._contentHeight(),
             maxScrollTop = d_h - w_h,
-            scrollTop = getWindowScrollTop();
+            scrollTop = this._scrollTop();
 
         positive = function (negative) {
           return maxScrollTop + negative;
@@ -260,111 +418,136 @@
         }
       }
 
-      anim = false;
-
       return function ($event, configId) {
-        if (anim && angular.isUndefined(configId)) {
+        if (this.element === null) {
           return;
         }
 
-        anim = true;
+        if (this._digesting && angular.isUndefined(configId)) {
+          return;
+        }
+
+        var self = this;
+
+        this._digesting = true;
 
         requestAnimFrame(function () {
-          _update(configId);
+          _update.call(self, configId);
 
-          anim = false;
+          self._digesting = false;
         });
       };
     }());
-    var digestDebounced = debounce(digest, 50);
 
-    this._configId = 0;
+    p._bind = function ($elm) {
+      this._binded = true;
 
-    this.configs = null;
+      if (this._isDefault()) {
+        $win
+        .on('scroll', this.scrollHandler)
+        .on('resize', this.scrollHandler);
+      }
+      else {
+        $win.on('resize', this.scrollHandler);
+        $elm.on('scroll', this.scrollHandler);
+      }
+    };
 
-    this.init = function () {
-      this.configs = {};
+    p._unbind = function ($elm) {
+      this._binded = false;
 
-      $win
-      .bind('scroll', digest)
-      .bind('resize', digest);
+      if (this._isDefault()) {
+        $win
+        .off('scroll', this.scrollHandler)
+        .off('resize', this.scrollHandler);
+      }
+      else {
+        $win.off('resize', this.scrollHandler);
+        $elm.off('scroll', this.scrollHandler);
+      }
+    };
+
+    return function scrollWatchStageFactory(name, $elm) {
+      return new Stage(name, $elm);
+    };
+  }])
+
+  .service('scrollWatchService', 
+  ["scrollWatchStageFactory", "$window", "$log", "$cacheFactory", function scrollWatchService(
+    scrollWatchStageFactory, $window, $log, $cacheFactory
+  ) {
+    var defaultStage = scrollWatchStageFactory(
+      STAGE_NAME_DEFAULT, 
+      angular.element($window)
+    );
+
+    this.stages = $cacheFactory(CACHE_ID_STAGE_POOL);
+
+    this.stages.put(STAGE_NAME_DEFAULT, defaultStage);
+
+    this.addStage = function (stageName, $elm) {
+      var stage = this.stages.get(stageName);
+
+      if (stage) {
+        stage.setElement($elm);
+        return;
+      }
+
+      stage = scrollWatchStageFactory(stageName, $elm);
+      this.stages.put(stageName, stage);
+    };
+
+    this.removeStage = function (stageName) {
+      var stage = this.stages.get(stageName);
+
+      if (stage) {
+        stage.clearElement();
+        this._checkStageDestroy(stage);
+      }
     };
 
     this.addConfig = function (config) {
-      angular.forEach(['target', 'from', 'to'], function (key) {
-        if (angular.isUndefined(config[key])) {
-          throw new Error('`'+ key +'` should be provided');
-        }
-      });
+      var stageName = config.stage,
+          stage = this.stages.get(stageName);
 
-      if (this.configs === null) {
-        this.init();
+      if (!stage) {
+        // Create a stage without element
+        stage = scrollWatchStageFactory(stageName);
+        this.stages.put(stageName, stage);
       }
 
-      this._configId++;
-
-      if (config.styleExpr) {
-        config.styleGetter = $parse(config.styleExpr);
-      }
-      if (config.classExpr) {
-        config.classGetter = $parse(config.classExpr);
-      }
-      if (config.brdcstExpr) {
-        var buf = config.scope.$eval(config.brdcstExpr);
-
-        if (buf.$rootScope) {
-          config.brdcstScope = $rootScope;
-          delete buf.$rootScope;
-        }
-        else {
-          config.brdcstScope = config.scope;
-        }
-
-        if (buf.$emit) {
-          config.brdcstIsEmit = true;
-          delete buf.$emit;
-        }
-        else {
-          config.brdcstIsEmit = false;
-        }
-
-        config.brdcstList = [];
-        angular.forEach(buf, function (expr, event) {
-          config.brdcstList.push({
-            condition: $parse(expr),
-            event: event,
-            wasActive: null
-          });
-        });
-      }
-
-      this.configs[this._configId] = config;
-
-      digestDebounced();
-
-      return this._configId;
+      return [stageName, stage.addConfig(config)];
     };
 
-    this.removeConfig = function (index) {
-      if (this.configs && this.configs[index]) {
-        delete this.configs[index];
+    this.removeConfig = function (handle) {
+      var configId = handle[1],
+          stage = this._getStage(handle);
 
-        if (objectSize(this.configs) === 0) {
-          this.destroy();
-        }
+      if (stage) {
+        stage.removeConfig(configId);
+        this._checkStageDestroy(stage);
       }
     };
 
-    this.digest = function (configId) {
-      digest(null, configId);
+    this.digest = function (handle) {
+      var configId = handle[1],
+          stage = this._getStage(handle);
+
+      if (stage) {
+        stage.digest(configId);
+      }
     };
 
-    this.destroy = function () {
-      this.configs = null;
+    this._checkStageDestroy = function (stage) {
+      if (stage.couldDestroy()) {
+        stage.destroy();
+        this.stages.remove(stage.name);
+      }
+    };
 
-      $win
-      .unbind('scroll', digest)
-      .unbind('resize', digest);
+    this._getStage = function (handle) {
+      var stageName = handle[0];
+      return this.stages.get(stageName);
     };
   }])
 
@@ -372,27 +555,28 @@
     return {
       restrict: 'A',
       link: function postLink(scope, iElm, iAttrs) {
-        var configId, deregisterDigestSync;
+        var configHandle, deregisterDigestSync;
 
         if (iAttrs[DIR_STYLE] || iAttrs[DIR_CLASS] || iAttrs[DIR_BROADCAST]) {
           scope.$watch(iAttrs.scrollWatch, scrollWatchChange, true);
 
           iElm.on('$destroy', function () {
-            if (configId) {
-              scrollWatchService.removeConfig(configId);
+            if (configHandle) {
+              scrollWatchService.removeConfig(configHandle);
             }
           });
         }
 
         function scrollWatchChange(config) {
           if (config && angular.isObject(config)) {
-            if (configId) {
-              scrollWatchService.removeConfig(configId);
+            if (configHandle) {
+              scrollWatchService.removeConfig(configHandle);
               (deregisterDigestSync || angular.noop)();
             }
 
             config.target = iElm;
             config.scope = scope;
+            config.stage = config.stage || STAGE_NAME_DEFAULT;
 
             if (iAttrs[DIR_STYLE]) {
               config.styleExpr = iAttrs[DIR_STYLE];
@@ -411,18 +595,52 @@
               deregisterDigestSync = scope.$watch(digestSync);
             }
 
-            configId = scrollWatchService.addConfig(config);
+            configHandle = scrollWatchService.addConfig(config);
           }
         }
 
         function digestSync () {
-          if (configId) {
-            scrollWatchService.digest(configId);
+          if (configHandle) {
+            scrollWatchService.digest(configHandle);
           }
         }
       }
     };
-  }]);
+  }])
+
+  .directive(DIR_STAGE, function (scrollWatchService) {
+    return {
+      restrict: 'A',
+      link: function postLink(scope, iElm, iAttrs) {
+        var stageName;
+
+        iAttrs.$observe(DIR_STAGE, function (val) {
+          if (val) {
+            if (stageName) {
+              scrollWatchService.removeStage(stageName);
+            }
+
+            stageName = val;
+            scrollWatchService.addStage(stageName, iElm);
+          }
+        });
+
+        iElm.on('$destroy', function () {
+          if (stageName) {
+            scrollWatchService.removeStage(stageName);
+          }
+        });
+      }
+    };
+  });
+
+  function objectSize(obj) {
+    var c = 0;
+    angular.forEach(obj, function () {
+      c++;
+    });
+    return c;
+  }
 
   function arrayDifference(tokens1, tokens2) {
     var values = [];
