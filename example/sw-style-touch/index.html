@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>angular-scroll-watch: sw-style touch-enabled</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script to-plunker src="../../src/angular-scroll-watch.js"></script>
+    <script to-plunker src="../assets/digest-count.js"></script>
+    <script to-plunker src="../assets/edit-on-plunker.js"></script>
+
+    <script>
+    angular.module('app', [
+      'app.digest-count', 
+      'app.edit-on-plunker',
+      'pc035860.scrollWatch'
+    ])
+
+    .controller('MainCtrl', function ($scope, $log) {
+      $scope.from = 0;
+      $scope.to = -1;
+      $scope.stageName = 'touch';
+
+      $scope.rgb = function (p) {
+        var num = Math.round(255 * p);
+
+        num = Math.max(0, Math.min(num, 255));
+
+        return [num, num, num].join(',');
+      };
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0; z-index: 65535;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+    <!-- edit on plunker -->
+    <edit-on-plunker files="['index.html', 'style.css']"
+      tags="['angularjs', 'scroll', 'angular-scroll-watch']"></edit-on-plunker>
+
+    <div id="touch-wrap" sw-stage="{{ stageName }}">
+      <div id="scroll-stage"
+        scroll-watch="{from: from, to: to, stage: stageName}"
+        sw-style="{backgroundColor: 'rgba(0, 0, 0, '+ 1 * $progress +')'}"></div>
+    </div>
+
+    <h1 id="hero">
+      <div class="text"
+      scroll-watch="{from: from, to: to, stage: stageName}"
+      sw-style="{
+        color: 'rgb(' + rgb($progress) + ')',
+        fontSize: (200 + 200 * $progress) +'%',
+
+        '-webkit-transform': 'rotateY('+ (720 * $progress) +'deg)',
+        'transform': 'rotateY('+ (720 * $progress) +'deg)'
+      }">YA!!</div>
+    </h1>
+  </body>
+
+</html>
