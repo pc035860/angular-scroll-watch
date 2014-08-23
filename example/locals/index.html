@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: locals</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/tomorrow.min.css">
+    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="//code.angularjs.org/1.2.22/angular.js"></script>
+    <script src="http://pc035860.github.io/angular-highlightjs/angular-highlightjs.min.js"></script>
+    <script to-plunker src="../../src/angular-scroll-watch.js"></script>
+    <script to-plunker src="../assets/digest-count.js"></script>
+    <script to-plunker src="../assets/edit-on-plunker.js"></script>
+
+    <script>
+    angular.module('app', [
+      'app.digest-count', 
+      'app.edit-on-plunker',
+      'pc035860.scrollWatch',
+      'hljs'
+    ])
+
+    .controller('MainCtrl', function ($scope, $log, $window) {
+      $scope.localsJSON = null;
+      $scope.scrolledStage = null;
+
+      $scope.$on('default', function ($evt, a, locals) {
+        $scope.scrolledStage = 'default';
+
+        $scope.$apply(function () {
+          updateJSON(locals);
+        });
+      });
+
+      $scope.$on('sub', function ($evt, a, locals) {
+        $scope.scrolledStage = 'sub';
+
+        $scope.$apply(function () {
+          updateJSON(locals);
+        });
+      });
+
+      $scope.$on('changeBg', function ($evt, active, locals) {
+        $scope.subStageColored = active;
+      });
+
+      function updateJSON(locals) {
+        $scope.localsJSON = $window.JSON.stringify(locals, null, '  ');
+      }
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <!-- digest count -->
+    <div digest-count></div>
+    <!-- edit on plunker -->
+    <edit-on-plunker files="['index.html', 'style.css']"
+      tags="['angularjs', 'scroll', 'angular-scroll-watch']"></edit-on-plunker>
+
+    <div id="scroll-stage"
+      scroll-watch="{from: 0, to: -1}"
+      sw-broadcast="{
+        $rootScope: true,
+        'default': true
+      }"></div>
+
+    <div id="locals">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Stage: <code ng-bind="scrolledStage"></code></h2>
+            <h3>Locals <small class="text-muted">(scroll to observe)</small></h3>
+            <div hljs source="localsJSON"></div>            
+          </div>
+          <div class="col-md-6">
+            <p><code>sub</code> stage changes background color after scrolling pass the <code>watcher</code> element.</p>
+            <div id="sub-scroll-stage" sw-stage="sub"
+              ng-class="{colored: subStageColored}">
+              <div class="placeholder">
+                <div class="dot"
+                  scroll-watch="{from :0, to: -1, stage: 'sub'}"
+                  sw-broadcast="{
+                    $rootScope: true,
+                    'sub': true,
+                    'changeBg': '$positive > $stageTop + $height'
+                  }">watcher</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
