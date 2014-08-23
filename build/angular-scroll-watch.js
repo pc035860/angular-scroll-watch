@@ -184,6 +184,74 @@
       return this.element[0] === $window;
     };
 
+    p._getElementMetrics = function ($elm) {
+      var rect, metrics, scrollTop, elm, stageTop;
+
+      elm = $elm[0];
+      rect = elm.getBoundingClientRect();
+      scrollTop = this._scrollTop();
+
+      metrics = {
+        offsetTop: rect.top + scrollTop
+      };
+
+      if (this._isDefault()) {
+        stageTop = metrics.offsetTop;
+      }
+      else {
+        stageTop = this._traverseStageTop(elm);
+      }
+
+      if (angular.isDefined(stageTop) && stageTop !== null) {
+        metrics.stageTop = stageTop;
+      }
+
+      return metrics;
+    };
+
+    p._traverseStageTop = function (elm) {
+      var stageElm = this.element[0],
+          top = 0, cursor, progress;
+
+      var updateProgress = function (cursor, progress) {
+        if (!progress) {
+          progress = {};
+        }
+        progress.parentNode = cursor.offsetParent;
+        progress.offsetTop = cursor.offsetTop;
+        progress.hitStage = progress.parentNode === stageElm;
+        return progress;
+      };
+
+      var c = 0;
+
+      cursor = elm;
+      progress = updateProgress(cursor);
+
+      do {
+        cursor = cursor.parentNode || cursor;
+
+        if (progress.parentNode === cursor) {
+          top += progress.offsetTop;
+
+          if (progress.hitStage) {
+            return top;
+          }
+
+          progress = updateProgress(cursor, progress);
+        }
+        else if (cursor === stageElm) {
+          return top + progress.offsetTop - stageElm.offsetTop;
+        }
+
+        if (++c >= 10) {
+          break;
+        }
+      } while (cursor.tagName !== 'BODY' || elm === cursor);
+
+      return null;
+    };
+
     p._contentHeight = function () {
       if (this._isDefault()) {
         var doc = $document[0].documentElement,
@@ -230,8 +298,8 @@
       /**
        * Style related functions
        */
-      _handleStyle = function (local, config) {
-        config.target.css(config.styleGetter(config.scope, local));
+      _handleStyle = function (locals, config) {
+        config.target.css(config.styleGetter(config.scope, locals));
       };
 
       /**
@@ -277,8 +345,8 @@
           $animate.setClass(element, toAdd, toRemove);
         }
       };
-      _handleClass = function (local, config) {
-        var newVal = config.classGetter(config.scope, local),
+      _handleClass = function (locals, config) {
+        var newVal = config.classGetter(config.scope, locals),
             oldVal = config._oldClassVal;
         var newClasses = arrayClasses(newVal || []);
         if (!oldVal) {
@@ -304,20 +372,20 @@
           scope.$apply(fn);
         }
       };
-      _handleBrdcst = function (local, config) {
+      _handleBrdcst = function (locals, config) {
         angular.forEach(config.brdcstList, function (v) {
           var active, funcName;
 
           funcName = config.brdcstIsEmit ? '$emit' : '$broadcast';
 
           if (v.always) {
-            config.brdcstScope[funcName](v.event, null, local);
+            config.brdcstScope[funcName](v.event, null, locals);
           }
           else if (v.condition) {
-            active = v.condition(config.scope, local);
+            active = v.condition(config.scope, locals);
             if (v.wasActive === null || active !== v.wasActive) {
               _apply(config.brdcstScope, function () {
-                config.brdcstScope[funcName](v.event, active, local);
+                config.brdcstScope[funcName](v.event, active, locals);
               });
             }
             v.wasActive = active;
@@ -328,12 +396,12 @@
       function _update(configId) {
         var positive, negative, numReverse, processConfig;
 
-        var self = this;
-
-        var w_h = this._containerHeight(),
-            d_h = this._contentHeight(),
-            maxScrollTop = d_h - w_h,
+        var containerHeight = this._containerHeight(),
+            contentHeight = this._contentHeight(),
+            maxScrollTop = contentHeight - containerHeight,
             scrollTop = this._scrollTop();
+
+        var self = this;
 
         positive = function (negative) {
           return maxScrollTop + negative;
@@ -346,7 +414,7 @@
         };
 
         processConfig = function (config) {
-          var from, to, localContext, progress;
+          var from, to, locals, progress, elmMetrics;
 
           from = config.from < 0 ? positive(config.from) : config.from;
           to = config.to < 0 ? positive(config.to) : config.to;
@@ -356,65 +424,72 @@
            */
           if (scrollTop < from) {
             progress = 0;
-            localContext = {
+            locals = {
               $positive: from,
               $negative: negative(from)
             };
           }
           else if (scrollTop > to) {
             progress = 1;
-            localContext = {
+            locals = {
               $positive: to,
               $negative: negative(to)
             };
           }
           else if (scrollTop >= from && scrollTop <= to) {
             progress = (scrollTop - from) / (to - from);
-            localContext = {
+            locals = {
               $positive: scrollTop,
               $negative: negative(scrollTop)
             };
           }
 
-          localContext.$progress = progress;
-          localContext.$percentage = progress * 100;
+          locals.$progress = progress;
+          locals.$percentage = progress * 100;
 
           if (!config._lastProgress || config._lastProgress === progress) {
-            localContext.$direction = 0;
+            locals.$direction = 0;
           }
           else if (config._lastProgress > progress) {
-            localContext.$direction = -1;
+            locals.$direction = -1;
           }
           else if (config._lastProgress < progress) {
-            localContext.$direction = 1;
+            locals.$direction = 1;
           }
+
+          locals.$height = config.target[0].offsetHeight;
+          angular.forEach(
+            self._getElementMetrics(config.target),
+            function (v, k) {
+              locals['$' + k] = v;
+          });
 
           /**
            * Applying
            */
           // to style
           if (config.styleGetter) {
-            _handleStyle(localContext, config);
+            _handleStyle(locals, config);
           }
 
           // to class
           if (config.classGetter) {
-            _handleClass(localContext, config);
+            _handleClass(locals, config);
           }
 
           // trigger breakpoints
           if (config.brdcstList) {
-            _handleBrdcst(localContext, config);
+            _handleBrdcst(locals, config);
           }
 
           config._lastProgress = progress;
         };
 
         if (angular.isUndefined(configId)) {
-          angular.forEach(self.configs, processConfig);
+          angular.forEach(this.configs, processConfig);
         }
-        else if (self.configs[configId]) {
-          processConfig(self.configs[configId]);
+        else if (this.configs[configId]) {
+          processConfig(this.configs[configId]);
         }
       }
 
