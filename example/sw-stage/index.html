@@ -26,7 +26,7 @@
 
       $scope.$on('speedChange', debounce(onSpeedChange, 100));
 
-      function onSpeedChange($evt, active, local) {
+      function onSpeedChange($evt, active, locals) {
         $scope.runAnim = false;
         $scope.$digest();
 
