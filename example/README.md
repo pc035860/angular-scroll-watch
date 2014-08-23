@@ -18,10 +18,8 @@
 
 - [Basic](http://pc035860.github.com/angular-scroll-watch/example/sw-stage/)
 
-### Digest sync
+### Miscellaneous
 
 - [Digest sync](http://pc035860.github.com/angular-scroll-watch/example/digest-sync/)
-
-### Locals
-
 - [Locals](http://pc035860.github.com/angular-scroll-watch/example/locals/)
+- [Touch-enabled](http://pc035860.github.com/angular-scroll-watch/example/sw-style-touch/)
