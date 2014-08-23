@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.0
+
+- New directive: `sw-stage`
+- Support more locals: `$height`, `$offsetTop`, `$stageTop`
+
 ## v0.4.0
 
 - Rename the **digest hook** config to `digestSync`
