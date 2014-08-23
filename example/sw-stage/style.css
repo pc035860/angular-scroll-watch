@@ -1,0 +1,65 @@
+lesshat-selector {
+  -lh-property: 0; } 
+@-webkit-keyframes rotating{ from{-webkit-transform: rotateY(0);} to{-webkit-transform: rotateY(360deg);}}
+@-moz-keyframes rotating{ from{-moz-transform: rotateY(0);} to{-moz-transform: rotateY(360deg);}}
+@-o-keyframes rotating{ from{-o-transform: rotateY(0);} to{-o-transform: rotateY(360deg);}}
+@keyframes rotating{ from{-webkit-transform: rotateY(0);-moz-transform: rotateY(0);-ms-transform: rotateY(0);transform: rotateY(0);} to{-webkit-transform: rotateY(360deg);-moz-transform: rotateY(360deg);-ms-transform: rotateY(360deg);transform: rotateY(360deg);};
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+#wrap {
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  height: 60%;
+}
+.speed-control,
+.size-control {
+  position: absolute;
+  left: -170px;
+  top: 0;
+  width: 120px;
+  height: 100%;
+  max-height: 415px;
+  overflow-y: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.speed-control__height,
+.size-control__height {
+  height: 400%;
+}
+.speed-control:hover,
+.size-control:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.size-control {
+  left: auto;
+  right: -170px;
+}
+.shield-holder {
+  -webkit-perspective: 400px;
+  -moz-perspective: 400px;
+  perspective: 400px;
+}
+.shield-holder img {
+  display: block;
+}
+.shield-holder img.anim {
+  -webkit-animation: rotating 4s linear both infinite;
+  -moz-animation: rotating 4s linear both infinite;
+  -o-animation: rotating 4s linear both infinite;
+  animation: rotating 4s linear both infinite;
+}
+.shield-holder img.anim.paused {
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+  -o-animation-play-state: paused;
+  animation-play-state: paused;
+}

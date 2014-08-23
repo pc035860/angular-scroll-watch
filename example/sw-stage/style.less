@@ -1,0 +1,65 @@
+@import "../assets/lesshat-prefixed";
+
+.lh-keyframes(~"rotating, from{transform: rotateY(0);} to{transform: rotateY(360deg);}");
+
+@control-width: 120px;
+@control-offset: 50px;
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#wrap {
+  .lh-translate(-50%, -50%);
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  height: 60%;
+}
+
+.speed-control {
+  position: absolute;
+  left: -(@control-width + @control-offset); top: 0;
+
+  width: @control-width;
+  height: 100%;
+  max-height: 415px;
+
+  overflow-y: auto;
+
+  background-color: rgba(0, 0, 0, 0.3);
+
+  &__height {
+    height: 400%;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.size-control {
+  &:extend(.speed-control all);
+
+  left: auto;
+  right: -(@control-width + @control-offset);
+}
+
+
+.shield-holder {
+  .lh-perspective(400);
+
+  img {
+    display: block;
+    &.anim {
+      .lh-animation(rotating 4s linear both infinite);
+
+      &.paused {
+        .lh-animation-play-state(paused);
+      }
+    }
+  }
+}
