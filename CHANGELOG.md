@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.2
+
+- Prevent inifinite digest on `scroll-watch`
+
 ## v0.5.1
 
 - Fix `sw-stage` annotation error
