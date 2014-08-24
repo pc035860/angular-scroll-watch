@@ -231,7 +231,7 @@ Basically there's no restriction on the DOM structure of `scroll-watch` and `sw-
 
 **Locals** here means a set of locally available variables inside our `sw-style`, `sw-class`, `sw-broadcast` expressions, which can be very useful when we're implmenting various effects.
 
-They're values depend on which stage your expression is watching (specified in `scroll-watch`'s `stage`) and where you're `scroll-watch` located in DOM.
+Their values depend on which stage your expression is watching (specified in `scroll-watch`'s `stage`) and where you're `scroll-watch` located in DOM.
 
 **All locals are presented as Number.**
 
