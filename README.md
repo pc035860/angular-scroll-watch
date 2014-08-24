@@ -6,6 +6,7 @@ Scroll-aware AngularJS with ease.
 
 #### Features
 
+- Pure AngularJS, no dependencies
 - **style** and **class** directives with scrolling locals
 - Supports multiple **stages**
 - Triggers scope digest only when needed
@@ -21,6 +22,9 @@ Scroll them to see the effects!
 
 Check out the [example directory](example/) for a full list of examples.
 
+## Requirements
+
+AngularJS 1.2+
 
 ## Getting started
 
