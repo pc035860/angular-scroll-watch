@@ -644,6 +644,9 @@
 
         function scrollWatchChange(config) {
           if (config && angular.isObject(config)) {
+            // Make sure it won't modify the scope variable
+            config = angular.copy(config);
+
             if (configHandle) {
               scrollWatchService.removeConfig(configHandle);
               (deregisterDigestSync || angular.noop)();
