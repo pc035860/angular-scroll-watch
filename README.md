@@ -94,7 +94,7 @@ There are couple of **locals** available in the expression. See [Locals](#locals
 
 - [`sw-style` basic](http://pc035860.github.io/angular-scroll-watch/example/sw-style/)
 - [`sw-style` touch-enabled](http://pc035860.github.io/angular-scroll-watch/example/sw-style-touch/)
-- [`Digest sync`](http://pc035860.github.com/angular-scroll-watch/example/digest-sync/)
+- [Digest sync](http://pc035860.github.com/angular-scroll-watch/example/digest-sync/)
 
 
 ### sw-class
@@ -195,7 +195,7 @@ $emit | Boolean | Use `$emit` instead of `$broadcast`. Default to `false`.
 
 - [`sw-broadcast` basic](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast/)
 - [`sw-broadcast` through `$emit`](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast-through-emit/)
-- [`Locals`](http://pc035860.github.com/angular-scroll-watch/example/locals/)
+- [Locals](http://pc035860.github.com/angular-scroll-watch/example/locals/)
 
 
 ### sw-stage
@@ -224,7 +224,7 @@ Basically there's no restriction on the DOM structure of `scroll-watch` and `sw-
 #### Examples
 
 - [`sw-stage` basic](http://pc035860.github.io/angular-scroll-watch/example/sw-stage/)
-- [`Locals`](http://pc035860.github.io/angular-scroll-watch/example/locals/)
+- [Locals](http://pc035860.github.io/angular-scroll-watch/example/locals/)
 
 
 ### Locals
