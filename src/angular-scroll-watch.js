@@ -683,7 +683,7 @@
     };
   })
 
-  .directive(DIR_STAGE, function (scrollWatchService) {
+  .directive('swStage', function (scrollWatchService) {
     return {
       restrict: 'A',
       link: function postLink(scope, iElm, iAttrs) {

@@ -683,7 +683,7 @@
     };
   }])
 
-  .directive(DIR_STAGE, function (scrollWatchService) {
+  .directive('swStage', ["scrollWatchService", function (scrollWatchService) {
     return {
       restrict: 'A',
       link: function postLink(scope, iElm, iAttrs) {
@@ -707,7 +707,7 @@
         });
       }
     };
-  });
+  }]);
 
   function objectSize(obj) {
     var c = 0;
