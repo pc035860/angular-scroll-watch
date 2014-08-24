@@ -2,7 +2,7 @@
 
 Scroll-aware AngularJS with ease.
 
-![How much angular do you want?](http://pc035860.github.io/angular-scroll-watch/images/how_much_angular_do_you_want.gif =310x) ![Lovely slides](http://pc035860.github.io/angular-scroll-watch/images/lovely_slides.gif =310x)
+<img src="http://pc035860.github.io/angular-scroll-watch/images/how_much_angular_do_you_want.gif" alt="How much angular do you want?" style="width: 355px;" /> <img src="http://pc035860.github.io/angular-scroll-watch/images/lovely_slides.gif" alt="Lovely slides" style="width: 355px;" />
 
 #### Features
 
