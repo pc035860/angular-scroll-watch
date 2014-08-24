@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.1
+
+- Fix `sw-stage` annotation error
+
 ## v0.5.0
 
 - New directive: `sw-stage`
