@@ -56,7 +56,7 @@ bower install angular-scroll-watch
 
 Base directive to specify a scroll-watch configuration. **Required for any watching activity.**
 
-`scroll-watch` should be used at least one of these directives: `sw-style`, `sw-class`, `sw-broadcast` to take effect., since itself is a configuration directive.
+`scroll-watch` should be used at least one of these directives: `sw-style`, `sw-class`, `sw-broadcast` to take effect, since itself is just a configuration directive.
 
 ```html
 <div scroll-watch="{from: 0, to: 1000}"
@@ -71,7 +71,7 @@ Name | Type | Description | Required
 from | Number | Watch-range starting point. Can be a positive or a negative (calculated from bottom to top) value. Note that `from`'s visual value (**scrollTop**) must be higher than `to`. | Yes
 to | Number | Watch-range starting point. Can be a positive or a negative (calculated from bottom to top) value. Note that `to`'s visual value (**scrollTop**) musts be lower than `from`. | Yes
 stage | String | Specify the stage name to watch for scrolling. Stages are defined via `sw-stage`. If no stage is speicified, default to browser window. | No
-digestSync | Boolean | Normally, `scroll-watch` only reevaluate watchs on `scroll` event fired. Setting `digestSync` to true will force `scroll-watch` to do the reevaluation when the binded scope gets digested. | No
+digestSync | Boolean | Normally, `scroll-watch` only reevaluate watchs on `scroll` event fired. Setting `digestSync` to `true` will force `scroll-watch` to do the reevaluation everytime the binded scope gets digested. | No
 
 #### Examples
 
@@ -84,7 +84,7 @@ digestSync | Boolean | Normally, `scroll-watch` only reevaluate watchs on `scrol
 
 Provides basically the same function with [built-in `ng-style`](https://docs.angularjs.org/api/ng/directive/ngStyle).
 
-`sw-style` gets reevaluated when the target stage firs `scroll` event or the scope it belongs to get digested (available with `digestSync` option set to `true`).
+`sw-style` gets reevaluated when the target stage firse `scroll` event or the scope it belongs to get digested (available with `digestSync` option set to `true`).
 
 There are couple of **locals** available in the expression. See [Locals](#locals) section for more information.
 
@@ -107,7 +107,7 @@ There are couple of **locals** available in the expression. See [Locals](#locals
 
 Provides basically the same function with [built-in `ng-class`](https://docs.angularjs.org/api/ng/directive/ngClass). All the animation goodies added after AngularJS 1.2 are also supported.
 
-`sw-class` gets reevaluated when the target stage firs `scroll` event or the scope it belongs to get digested (available with `digestSync` option set to `true`).
+`sw-class` gets reevaluated when the target stage fires `scroll` event or the scope it belongs to get digested (available with `digestSync` option set to `true`).
 
 There are couple of **locals** available in the expression. See [Locals](#locals) section for more information.
 
@@ -144,7 +144,7 @@ There are couple of **locals** available in the expression. See [Locals](#locals
 </div>
 ```
 
-By default, all the events `$broadcast`(or `$emit`) by `sw-broadcast` will be **inside the digest loop**. From time to time, you might need the event to be `$broadcast`(or `$emit`) on every stage `scroll`. Setting the condition to `true` will do the work, and no longer trigger the scope digest for performance consideration.
+By default, all the events `$broadcast`(or `$emit`) by `sw-broadcast` will be **inside the digest loop**. From time to time, you might need the event to be `$broadcast`(or `$emit`) on every stage `scroll`. Setting the condition to `true` will do the work, and no longer trigger the scope digest due to performance consideration.
 
 ```html
 <div scroll-watch="{from: 0, to: -1}"
@@ -206,7 +206,7 @@ $emit | Boolean | Use `$emit` instead of `$broadcast`. Default to `false`.
 
 **Type**: `string` (interpolation-ready)
 
-`sw-stage` let you specify the scrolling element (the container) to watch with an customized name.
+`sw-stage` let you specify the scrolling element (the container) to watch with a customized name.
 
 A default stage named `pc035860` (WTF), which is the browser window, will always be presented. (And will be used if you don't specify the `stage` option in `scroll-watch`.)
 
