@@ -208,7 +208,7 @@ $emit | Boolean | Use `$emit` instead of `$broadcast`. Default to `false`.
 
 `sw-stage` let you specify the scrolling element (the container) to watch with a customized name.
 
-A default stage named `pc035860` (WTF), which is the browser window, will always be presented. (And will be used if you don't specify the `stage` option in `scroll-watch`.)
+A default stage named `pc035860` (Ya!!), which is the browser window, will always be presented. (And will be used if you don't specify the `stage` option in `scroll-watch`.)
 
 Basically there's no restriction on the DOM structure of `scroll-watch` and `sw-stage`, even the directive creation order doesn't matter.
 
