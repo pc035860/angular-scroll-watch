@@ -65,9 +65,18 @@
 
       $scope.items.load(50);
 
-      $scope.$on('load more', function ($evt) {
+      $scope.$on('load more', function () {
+        // Normally scroll case
         $scope.items.load(50);
       });
+      $scope.$on('load more end', function ($evt, n, locals) {
+        // For the "end" button
+        if (locals.$progress == 1) {
+          $scope.$apply(function () {
+            $scope.items.load(50);
+          });
+        }
+      });      
     });
     </script>
   </head>
@@ -83,7 +92,8 @@
     <div id="content"
       scroll-watch="{from: 0, to: -1}"
       sw-broadcast="{
-        'load more': '$negative > -400'
+        'load more': '$negative > -400',
+        'load more end': true
       }">
 
       <div class="jumbotron">
