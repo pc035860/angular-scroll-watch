@@ -63,7 +63,7 @@
     .controller('MainCtrl', function ($scope, $log, Items) {
       $scope.items = Items();
 
-      $scope.items.load(100);
+      $scope.items.load(50);
 
       $scope.$on('load more', function ($evt) {
         $scope.items.load(50);
@@ -89,7 +89,7 @@
       <div class="jumbotron">
         <div class="container">
           <h1>Infinite scroll</h1>
-          <p>Automatically append more items when the scroll distance from bottom is lower than 500.</p>
+          <p>Automatically append more items when the scroll distance from bottom is less than 400.</p>
           <p>
             <!-- edit on plunker -->
             <edit-on-plunker files="['index.html', 'style.css']"
