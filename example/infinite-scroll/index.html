@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>angular-scroll-watch: infinite scroll</title>
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/animatecss/3.2.0/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-animate.js"></script>
+    <script to-plunker src="../../src/angular-scroll-watch.js"></script>
+    <script to-plunker src="../assets/digest-count.js"></script>
+    <script to-plunker src="../assets/edit-on-plunker.js"></script>
+
+    <script>
+    angular.module('app', [
+      'ngAnimate',
+      'app.digest-count',
+      'app.edit-on-plunker',
+      'pc035860.scrollWatch'
+    ])
+
+    .factory('Items', function ($http, $timeout, $q) {
+      var newItems = function () {
+        var _id = 0;
+
+        return {
+          data: [],
+
+          loading: false,
+          load: function (number) {
+            var dfd = $q.defer(),
+                that = this,
+                i;
+
+            this.loading = true;
+
+            $timeout(function () {
+              for (i = 0; i < number; i++) {
+                that.data.push({
+                  id: ++_id
+                });
+              }
+              that.loading = false;
+
+              dfd.resolve();
+            }, 150);
+
+            return dfd.promise;
+          }
+        };
+      };
+
+      return function () {
+        return newItems();
+      };
+    })
+
+    .controller('MainCtrl', function ($scope, $log, Items) {
+      $scope.items = Items();
+
+      $scope.items.load(100);
+
+      $scope.$on('load more', function ($evt) {
+        $scope.items.load(50);
+      });
+    });
+    </script>
+  </head>
+
+  <body ng-controller="MainCtrl">
+    <!-- digest count -->
+    <div digest-count></div>
+    <!-- fork me on github -->
+    <a href="https://github.com/pc035860/angular-scroll-watch">
+      <img style="position: fixed; top: 0; right: 0; border: 0; z-index: 100;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" />
+    </a>
+
+    <div id="content"
+      scroll-watch="{from: 0, to: -1}"
+      sw-broadcast="{
+        'load more': '$negative > -400'
+      }">
+
+      <div class="jumbotron">
+        <div class="container">
+          <h1>Infinite scroll</h1>
+          <p>Automatically append more items when the scroll distance from bottom is lower than 500.</p>
+          <p>
+            <!-- edit on plunker -->
+            <edit-on-plunker files="['index.html', 'style.css']"
+              tags="['angularjs', 'scroll', 'angular-scroll-watch']"
+              class="btn-lg"></edit-on-plunker>
+          </p>
+        </div>
+      </div>
+
+      <div class="container">
+        
+        <div class="row">
+          <div class="col-sm-2 item-anim" ng-repeat="item in items.data">
+            <div class="item">{{ item.id }}</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </body>
+
+</html>

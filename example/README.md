@@ -13,6 +13,7 @@
 
 - [Basic](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast/)
 - [Through `$scope.$emit`](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast-through-emit/)
+- [Infinite scroll](http://pc035860.github.com/angular-scroll-watch/example/infinite-scroll/)
 
 ### `sw-stage`
 

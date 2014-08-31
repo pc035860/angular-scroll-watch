@@ -1,0 +1,44 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #EEFFD8;
+}
+#content {
+  position: relative;
+}
+.jumbotron {
+  background-color: transparent;
+}
+.jumbotron .btn {
+  position: static !important;
+  left: auto !important;
+  top: auto !important;
+  margin: 0 !important;
+}
+.item {
+  -webkit-border-radius: 5px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 5px;
+  -moz-background-clip: padding;
+  border-radius: 5px;
+  background-clip: padding-box;
+  margin-bottom: 10px;
+  text-align: center;
+  min-height: 80px;
+  line-height: 80px;
+  color: #A662B2;
+  font-size: 24px;
+  border: 5px solid #F5BFFF;
+}
+.item-anim.ng-enter {
+  -webkit-animation: zoomInUp 800ms both;
+  -moz-animation: zoomInUp 800ms both;
+  -o-animation: zoomInUp 800ms both;
+  animation: zoomInUp 800ms both;
+}
+.item-anim.ng-enter-stagger {
+  -webkit-animation-delay: 25ms;
+  -moz-animation-delay: 25ms;
+  -o-animation-delay: 25ms;
+  animation-delay: 25ms;
+}

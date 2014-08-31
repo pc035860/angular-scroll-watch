@@ -1,0 +1,51 @@
+@import "../assets/lesshat-prefixed";
+
+body {
+  margin: 0;
+  padding: 0;
+
+  background-color: #EEFFD8;
+}
+
+#content {
+  position: relative;
+}
+
+.jumbotron {
+  background-color: transparent;
+  .btn {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0 !important;
+  }
+}
+
+.item {
+  @h: 80px;
+
+  .lh-border-radius(5px);
+
+  margin-bottom: 10px;
+
+  text-align: center;
+  min-height: @h;
+  line-height: @h;
+  color: #A662B2;
+  font-size: 24px;
+  border: 5px solid #F5BFFF;
+}
+
+.item-anim {
+  &.ng-enter {
+    .lh-animation(zoomInUp 800ms both);
+
+    &-stagger {
+      .lh-animation-delay(25ms);
+    }
+
+    &-active {
+
+    }
+  }
+}

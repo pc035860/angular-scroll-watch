@@ -200,6 +200,7 @@ $emit | Boolean | Use `$emit` instead of `$broadcast`. Default to `false`.
 - [`sw-broadcast` basic](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast/)
 - [`sw-broadcast` through `$emit`](http://pc035860.github.com/angular-scroll-watch/example/sw-broadcast-through-emit/)
 - [Locals](http://pc035860.github.com/angular-scroll-watch/example/locals/)
+- [Infinite scroll](http://pc035860.github.com/angular-scroll-watch/example/infinite-scroll/)
 
 
 ### sw-stage
