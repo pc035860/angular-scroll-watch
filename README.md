@@ -31,7 +31,7 @@ AngularJS 1.2+
 Include the `angular-scroll-watch` module with AngularJS script in your page.
 
 ```html
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.22/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
 <script src="http://pc035860.github.io/angular-scroll-watch/build/angular-scroll-watch.min.js"></script>
 ```
 

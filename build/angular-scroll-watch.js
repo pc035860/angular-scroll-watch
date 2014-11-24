@@ -344,6 +344,7 @@
         } else {
           $animate.setClass(element, toAdd, toRemove);
         }
+        config.scope.$digest();
       };
       _handleClass = function (locals, config) {
         var newVal = config.classGetter(config.scope, locals),
