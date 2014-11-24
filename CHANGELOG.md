@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.3
+
+- Support AngularJS 1.3 class animations ([#2](https://github.com/pc035860/angular-scroll-watch/issues/2))
+
 ## v0.5.2
 
 - Prevent inifinite digest on `scroll-watch`
