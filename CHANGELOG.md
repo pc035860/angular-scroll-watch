@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.4
+
+- Update bower main path ([#3](https://github.com/pc035860/angular-scroll-watch/pull/3))
+
 ## v0.5.3
 
 - Support AngularJS 1.3 class animations ([#2](https://github.com/pc035860/angular-scroll-watch/issues/2))
