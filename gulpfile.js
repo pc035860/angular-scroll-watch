@@ -38,6 +38,7 @@ var config = {
 gulp.task('build', ['lint'], function () {
   return gulp.src(config.src)
     .pipe(annotate())
+    .pipe(header(config.banner, {pkg: pkg, today: getTodayStr()}))
     .pipe(gulp.dest(config.buildDir))
     .pipe(uglify())
     .pipe(rename({extname: '.min.js'}))

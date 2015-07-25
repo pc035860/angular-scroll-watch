@@ -1,6 +1,6 @@
 {
   "name": "angular-scroll-watch",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "Basic scroll-aware directives for AngularJS.",
   "main": "build/angular-scroll-watch.js",
   "ignore": [
