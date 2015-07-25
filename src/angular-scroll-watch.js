@@ -169,9 +169,8 @@
     };
 
     p.destroy = function () {
-      this._unbind(this.element);
+      this.clearElement();
       this.configs = null;
-      this.element = null;
       this.scrollHandler = null;
       this._digestDebounced = null;
     };
