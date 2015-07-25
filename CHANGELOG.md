@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.5
+
+- Fix `sw-stage` destroy issue ([#6](https://github.com/pc035860/angular-scroll-watch/issues/6))
+
 ## v0.5.4
 
 - Update bower main path ([#3](https://github.com/pc035860/angular-scroll-watch/pull/3))
