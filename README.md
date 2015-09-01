@@ -70,7 +70,7 @@ Name | Type | Description | Required
 --- | --- | --- | :---:
 from | Number | Watch-range starting point. Can be a positive or a negative (calculated from bottom to top) value. Note that `from`'s visual value (**scrollTop**) must be higher than `to`. | Yes
 to | Number | Watch-range starting point. Can be a positive or a negative (calculated from bottom to top) value. Note that `to`'s visual value (**scrollTop**) musts be lower than `from`. | Yes
-stage | String | Specify the stage name to watch for scrolling. Stages are defined via `sw-stage`. If no stage is speicified, default to browser window. | No
+stage | String | Specify the stage name to watch for scrolling. Stages are defined via `sw-stage`. If no stage is specified, default to browser window. | No
 digestSync | Boolean | Normally, `scroll-watch` only reevaluate watchs on `scroll` event fired. Setting `digestSync` to `true` will force `scroll-watch` to do the reevaluation everytime the binded scope gets digested. | No
 
 #### Examples
