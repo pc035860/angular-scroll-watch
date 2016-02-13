@@ -47,6 +47,11 @@ angular.module('myApp', ['pc035860.scrollWatch']);
 bower install angular-scroll-watch
 ```
 
+### Install with npm
+
+```sh
+npm install angular-scroll-watch
+```
 
 ## Usage
 
