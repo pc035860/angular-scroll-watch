@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.1
+
+- Fix package name typo
+
 ## v0.6.0
 
 - Publish to NPM ([#8](https://github.com/pc035860/angular-scroll-watch/issues/8))
