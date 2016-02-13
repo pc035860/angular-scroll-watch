@@ -1,5 +1,5 @@
 /*! anguar-scroll-watch
-version: 0.5.5
+version: 0.6.0
 build date: 2016-2-13
 author: [object Object]
 https://github.com/pc035860/angular-scroll-watch.git */
