@@ -2,7 +2,7 @@
   "name": "anguar-scroll-watch",
   "version": "0.5.5",
   "description": "Basic scroll-aware directives for AngularJS.",
-  "main": "index.js",
+  "main": "build/angular-scroll-watch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,12 +10,23 @@
     "type": "git",
     "url": "https://github.com/pc035860/angular-scroll-watch.git"
   },
-  "author": "Chih-Hsuan Fan",
+  "keywords": [
+    "angularjs",
+    "scroll"
+  ],
+  "author": {
+    "name": "Chih-Hsuan Fan",
+    "email": "pc035860@gmail.com"
+  },
+  "readmeFilename": "README.md",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pc035860/angular-scroll-watch/issues"
   },
   "homepage": "https://github.com/pc035860/angular-scroll-watch",
+  "dependencies": {
+    "angular": "^1.2"
+  },
   "devDependencies": {
     "gulp": "^3.8.6",
     "gulp-util": "^3.0.0",
