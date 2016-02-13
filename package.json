@@ -24,6 +24,9 @@
     "url": "https://github.com/pc035860/angular-scroll-watch/issues"
   },
   "homepage": "https://github.com/pc035860/angular-scroll-watch",
+  "dependencies": {
+    "angular": "^1.2"
+  },
   "devDependencies": {
     "gulp": "^3.8.6",
     "gulp-util": "^3.0.0",
