@@ -1,6 +1,4 @@
-# angular-scroll-watch
-
-[![Join the chat at https://gitter.im/pc035860/angular-scroll-watch](https://badges.gitter.im/pc035860/angular-scroll-watch.svg)](https://gitter.im/pc035860/angular-scroll-watch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+# angular-scroll-watch [![Join the chat at https://gitter.im/pc035860/angular-scroll-watch](https://badges.gitter.im/pc035860/angular-scroll-watch.svg)](https://gitter.im/pc035860/angular-scroll-watch?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Scroll-aware AngularJS with ease.
 
